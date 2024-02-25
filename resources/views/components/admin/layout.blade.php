@@ -10,8 +10,6 @@
 </head>
 
 <body class="py-5 md:py-0">
-
-    <!-- BEGIN: Mobile Menu -->
     <div class="mobile-menu md:hidden">
         <div class="mobile-menu-bar">
             <a href="" class="flex mr-auto">
@@ -581,8 +579,6 @@
             </li>
         </ul>
     </div>
-    <!-- END: Mobile Menu -->
-    <!-- BEGIN: Top Bar -->
     <div
         class="top-bar-boxed h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] -mt-7 md:mt-0 -mx-3 sm:-mx-8 md:-mx-0 px-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 sm:px-8 md:px-10 md:pt-10 md:bg-gradient-to-b md:from-slate-100 md:to-transparent dark:md:from-darkmode-700">
         <div class="h-full flex items-center">
@@ -594,7 +590,6 @@
 
             <x-admin.breadcrumbs title="{{ $title }}" />
 
-            <!-- BEGIN: Account Menu -->
             <div class="intro-x dropdown w-8 h-8">
                 <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
                     role="button" aria-expanded="false" data-tw-toggle="dropdown">
@@ -625,19 +620,14 @@
                     </ul>
                 </div>
             </div>
-            <!-- END: Account Menu -->
+            
         </div>
     </div>
-    <!-- END: Top Bar -->
     <div class="flex overflow-hidden">
-        <!-- BEGIN: Side Menu -->
         <x-admin.sidebar></x-admin.sidebar>
-        <!-- END: Side Menu -->
-        <!-- BEGIN: Content -->
-        <div class="content" id="app2">
+        <div class="content" id="app">
             {{ $slot }}
         </div>
-        <!-- END: Content -->
     </div>
 
     <x-admin.toaster />

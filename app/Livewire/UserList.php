@@ -31,7 +31,12 @@ class UserList extends Component implements CrudListContract
             [
                 'name' => 'Name',
                 'html' => true,
+                'sort' => true,
                 'cb' => fn ($user) => $user->full_name
+            ],
+            [
+                'name' => 'Email',
+                'key'   => 'email'
             ],
             [
                 'name' => 'Role',
@@ -47,6 +52,7 @@ class UserList extends Component implements CrudListContract
             [
                 'name'        => 'Created At',
                 'html'        => true,
+                'sort'        => true,
                 'cb'          => fn ($user) => $user->created_at->format('M d, Y, g:i A')
             ],
             [

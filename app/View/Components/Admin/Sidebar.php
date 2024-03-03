@@ -20,6 +20,13 @@ class Sidebar extends Component
                 'child'     => [],
             ],
             [
+                'name'      => 'Home',
+                'icon'      => 'tv-2',
+                'link'      => route('home.developers'),
+                'condition' => 'home',
+                'child'     => [],
+            ],
+            [
                 'name'      => 'Downloads',
                 'icon'      => 'download',
                 'link'      => '#',
@@ -50,7 +57,7 @@ class Sidebar extends Component
             [
                 'name'      => 'Cameras',
                 'icon'      => 'cctv',
-                'link'      => '#',
+                'link'      => route('camera.index'),
                 'condition' => 'dashboard',
                 'child'     => [],
             ],

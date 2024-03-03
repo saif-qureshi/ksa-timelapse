@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Developer::class)->constrained()->cascadeOnDelete();
             $table->string('tag', 191);
             $table->text('description');
-            $table->tinyInteger('is_active');
+            $table->tinyInteger('is_active')->default(true);
             $table->string('logo', 191);
             $table->timestamps();
         });

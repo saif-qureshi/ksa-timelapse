@@ -7,3 +7,6 @@ import "@left4code/tw-starter/dist/js/tab";
 import "./accordian";
 import "./lucide";
 import "./side-menu";
+import "./mobile-menu";
+import "./tw-merge";
+import "./transition";

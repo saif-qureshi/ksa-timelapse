@@ -4,6 +4,7 @@
 namespace App\Traits;
 
 use App\Extensions\ApiPagination;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 trait CrudListHelper
@@ -164,5 +165,10 @@ trait CrudListHelper
     public function is_multi_array($arr): bool
     {
         return (!array_is_list($arr));
+    }
+
+    public function delete(Model $model)
+    {
+        $model->delete();
     }
 }

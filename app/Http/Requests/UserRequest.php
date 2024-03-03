@@ -43,7 +43,7 @@ class UserRequest extends FormRequest
 
         if ($this->method() === 'PUT') {
             $rules['password'] = 'nullable|string|min:8|max:191|confirmed';
-            $rules['email'] = 'required|email|unique:users,email,' . $this->email;
+            $rules['email'] = 'required|email|unique:users,email,' . $this->user->id;
         }
 
         return $rules;

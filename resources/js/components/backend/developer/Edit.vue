@@ -122,8 +122,6 @@ const data = ref(developer);
 const errors = ref({});
 const loading = ref(false);
 
-console.log(data.value);
-
 const setImage = (img, key) => {
     data.value[key] = img;
 };

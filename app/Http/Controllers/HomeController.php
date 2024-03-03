@@ -2,27 +2,36 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Camera;
+use App\Models\Developer;
+use App\Models\Project;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+
+    public function developers()
     {
-        $this->middleware('auth');
+        $developers = Developer::where('is_active', true)->paginate(12);
+
+        return view('home.developers', compact('developers'));
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+    public function projects(Developer $developer)
     {
-        return view('home');
+        $projects = Project::where('is_active', true)->where('developer_id', $developer->id)->paginate(12);
+
+        return view('home.projects', compact('projects'));
+    }
+
+    public function cameras(Project $project)
+    {
+        $cameras = Camera::with(['photos' => function ($query) {
+            return $query->limit(5)->latest();
+        }])->where('is_active', true)
+            ->where('project_id', $project->id)
+            ->paginate(12);
+
+        return view('home.cameras', compact('cameras'));
     }
 }

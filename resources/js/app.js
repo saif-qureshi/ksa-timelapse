@@ -10,7 +10,9 @@ import AddProject from "./components/backend/project/Add.vue";
 import EditProject from "./components/backend/project/Edit.vue";
 import AddUser from "./components/backend/user/Add.vue";
 import EditUser from "./components/backend/user/Edit.vue";
-
+import AddCamera from "./components/backend/camera/Add.vue"
+import EditCamera from "./components/backend/camera/Edit.vue"
+import ViewCamera from "./components/backend/camera/View.vue"
 
 const app = createApp({});
 
@@ -26,5 +28,9 @@ app.component("edit-project", EditProject);
 
 app.component("add-user", AddUser);
 app.component("edit-user", EditUser);
+
+app.component("add-camera", AddCamera);
+app.component("edit-camera", EditCamera);
+app.component("view-camera", ViewCamera);
 
 app.use(Antd).mount("#backend-app");

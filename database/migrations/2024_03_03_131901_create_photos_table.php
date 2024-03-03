@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Camera;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -11,13 +12,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('developers', function (Blueprint $table) {
+        Schema::create('photos', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 191);
-            $table->string('tag', 191);
-            $table->text('description');
-            $table->string('logo');
-            $table->tinyInteger('is_active')->default(true);
+            $table->foreignIdFor(Camera::class)->constrained()->cascadeOnDelete();
+            $table->string('image', 191);
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('developers');
+        Schema::dropIfExists('photos');
     }
 };

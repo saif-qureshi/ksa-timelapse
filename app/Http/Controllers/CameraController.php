@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CameraRequest;
 use App\Models\Camera;
+use App\Models\Developer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class CameraController extends Controller
 {
@@ -12,7 +15,7 @@ class CameraController extends Controller
      */
     public function index()
     {
-        //
+        return view('camera.index');
     }
 
     /**
@@ -20,15 +23,21 @@ class CameraController extends Controller
      */
     public function create()
     {
-        //
+        $developers = Developer::selectRaw('id as value, name as label')->where('is_active', true)->get();
+
+        return view('camera.create', compact('developers'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CameraRequest $request)
     {
-        //
+        $inputs = $request->validated();
+
+        Camera::create($inputs);
+
+        return response()->json('project created successfully', Response::HTTP_CREATED);
     }
 
     /**
@@ -36,7 +45,7 @@ class CameraController extends Controller
      */
     public function show(Camera $camera)
     {
-        //
+        return view('camera.show', compact('camera'));
     }
 
     /**
@@ -44,15 +53,21 @@ class CameraController extends Controller
      */
     public function edit(Camera $camera)
     {
-        //
+        $developers = Developer::selectRaw('id as value, name as label')->where('is_active', true)->get();
+
+        return view('camera.edit', compact('developers', 'camera'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Camera $camera)
+    public function update(CameraRequest $request, Camera $camera)
     {
-        //
+        $inputs = $request->validated();
+
+        $camera->update($inputs);
+
+        return response()->json('project updated successfully', Response::HTTP_ACCEPTED);
     }
 
     /**
@@ -61,5 +76,12 @@ class CameraController extends Controller
     public function destroy(Camera $camera)
     {
         //
+    }
+
+    public function refreshToken(Camera $camera)
+    {
+        $camera->refreshAccessToken();
+
+        return redirect()->back()->with('success', 'Access token regenerated');
     }
 }

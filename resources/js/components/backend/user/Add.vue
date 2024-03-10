@@ -1,4 +1,4 @@
-<template>
+ <template>
     <div>
         <div class="grid grid-cols-12 mt-8">
             <div class="col-span-12 lg:col-span-8 sm:col-span-12">
@@ -255,3 +255,4 @@ watch(
     }
 );
 </script>
+

@@ -2,6 +2,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">
         {{ $this->getTableName() }}
     </h2>
+
     @if (session()->has('success'))
         <div class="flex p-4 my-4 text-sm border border-green-300  text-green-800 rounded-lg bg-blue-50" role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -110,10 +111,10 @@
                 <tbody>
 
                     @foreach ($data as $key => $value)
-                        <tr class="intro-x relative">
+                        <tr class="intro-x relative" wire:key="{{ Str::uuid() }}">
                             @foreach ($table as $header)
-                                <td
-                                    class="w-40 text-center {{ @$header['class'] }} {{ isset($header['actions']) ? 'table-report__action w-56' : '' }}">
+                                <td wire:key="{{ Str::uuid() }}"
+                                    class="text-center {{ @$header['class'] }} {{ isset($header['actions']) ? 'table-report__action w-auto' : '' }}">
                                     @if (isset($header['key']))
                                         @if (@$header['dot'])
                                             {{ Arr::get($value, $header['key']) }}
@@ -162,21 +163,51 @@
                                             </div>
                                         @endif
                                     @elseif(isset($header['actions']))
-                                        <div class="flex justify-center items-center">
-                                            @foreach ($header['actions'] as $action)
-                                                @continue(isset($action['visible']) && !$action['visible']($value))
-                                                <a href="{{ isset($action['route']) ? $action['route']($value) : '' }}"
-                                                    title="{{ $action['tooltip'] ?? '' }}"
-                                                    @if (isset($action['onclick'])) onclick="{{ $action['onclick']($value)['name'] }}(event,'{{ $action['onclick']($value)['params'] }}')" @endif
-                                                    class="flex items-center mr-3 {{ @$action['class'] }}">
-                                                    @include('vendor.icons.' . $action['icon'])
-                                                    @if ($action['name'] instanceof Closure)
-                                                        {{ $action['name']($value) }}
-                                                    @else
-                                                        {{ $action['name'] }}
-                                                    @endif
-                                                </a>
-                                            @endforeach
+                                        <div data-tw-merge data-tw-placement="bottom-end" class="dropdown relative">
+                                            <button data-tw-merge data-tw-toggle="dropdown" aria-expanded="false"
+                                                class="transition duration-200 border shadow-sm inline-flex items-center justify-center p-2 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none bg-white">
+                                                <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                            </button>
+                                            <div data-transition data-selector=".show"
+                                                data-enter="transition-all ease-linear duration-150"
+                                                data-enter-from="absolute !mt-5 invisible opacity-0 translate-y-1"
+                                                data-enter-to="!mt-1 visible opacity-100 translate-y-0"
+                                                data-leave="transition-all ease-linear duration-150"
+                                                data-leave-from="!mt-1 visible opacity-100 translate-y-0"
+                                                data-leave-to="absolute !mt-5 invisible opacity-0 translate-y-1"
+                                                class="dropdown-menu absolute z-[9999] hidden">
+                                                <div data-tw-merge
+                                                    class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] w-[150px]">
+                                                    @foreach ($header['actions'] as $action)
+                                                        @continue(isset($action['visible']) && !$action['visible']($value))
+                                                        <a href="{{ isset($action['route']) ? $action['route']($value) : '' }}"
+                                                            title="{{ $action['tooltip'] ?? '' }}"
+                                                            @if (isset($action['onclick'])) onclick="{{ $action['onclick']($value)['name'] }}(event,'{{ $action['onclick']($value)['params'] }}')" @endif
+                                                            class="cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item {{ @$action['class'] }}">
+                                                            @include('vendor.icons.' . $action['icon'])
+                                                            @if ($action['name'] instanceof Closure)
+                                                                {{ $action['name']($value) }}
+                                                            @else
+                                                                {{ $action['name'] }}
+                                                            @endif
+                                                        </a>
+                                                    @endforeach
+                                                    <button href="javascript:void(0)"
+                                                        data-access-token="{{ $data['access_token'] }}"
+                                                        class="copy-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
+                                                        <i data-lucide="clipboard-check"
+                                                            class="h-4 w-4 text-blue-500"></i>
+                                                        Copy
+                                                    </button>
+                                                    <button
+                                                        title="Refresh api token for this camera"
+                                                        class="regenerate-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
+                                                        <i data-lucide="refresh-ccw"
+                                                            class="h-4 w-4 text-green-500"></i>
+                                                        Regenerate
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     @elseif(isset($header['anchor']))
                                         @if ($this->is_multi_array($header['anchor']))
@@ -214,7 +245,8 @@
 
                     @if (count($data) === 0)
                         <tr class="intro-x">
-                            <td valign="top" colspan="{{ count($table) }}" class="text-center">No data available in
+                            <td valign="top" colspan="{{ count($table) }}" class="text-center">No data available
+                                in
                                 table
                             </td>
                         </tr>

@@ -25,7 +25,7 @@ return new class extends Migration
             $table->tinyInteger('can_create_user')->default(false);
             $table->tinyInteger('can_create_video')->default(false);
             $table->rememberToken();
-            $table->timestamp('last_login_at')->default(null);
+            $table->timestamp('last_login_at')->nullable()->default(null);
             $table->timestamps();
         });
 

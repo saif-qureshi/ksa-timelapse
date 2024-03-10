@@ -20,7 +20,7 @@ const { camera } = defineProps({
 });
 
 const photos = ref([]);
-const selectedDate = ref(dayjs());
+const selectedDate = ref(dayjs('03-03-2024'));
 const selectedPhoto = ref({});
 
 const getPhotos = async () => {

@@ -23,6 +23,7 @@ import Icon from "../../Icon.vue";
 import SingleView from "./partials/tabs/SingleView.vue";
 import ZoomView from "./partials/tabs/ZoomView.vue";
 import Feedback from "./partials/Feedback.vue";
+import SideBySide from "./partials/tabs/SideBySide.vue";
 
 const { camera } = defineProps({
   camera: Object,
@@ -39,7 +40,7 @@ const tabs = [
     key: 4,
     icon: "Columns2",
     label: "Side By Side",
-    children: ZoomView,
+    children: SideBySide,
   },
   {
     key: 5,

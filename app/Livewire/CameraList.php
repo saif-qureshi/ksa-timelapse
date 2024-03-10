@@ -121,9 +121,4 @@ class CameraList extends Component implements CrudListContract
                 'filters' => $this->buildFiltersWithProperties()
             ]);
     }
-
-    public function refreshToken()
-    {
-        dd('sah');
-    }
 }

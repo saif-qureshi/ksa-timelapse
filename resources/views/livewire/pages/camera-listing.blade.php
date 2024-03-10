@@ -2,6 +2,7 @@
     <h2 class="intro-y text-lg font-medium mt-10">
         {{ $this->getTableName() }}
     </h2>
+
     @if (session()->has('success'))
         <div class="flex p-4 my-4 text-sm border border-green-300  text-green-800 rounded-lg bg-blue-50" role="alert">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -110,9 +111,9 @@
                 <tbody>
 
                     @foreach ($data as $key => $value)
-                        <tr class="intro-x relative">
+                        <tr class="intro-x relative" wire:key="{{ Str::uuid() }}">
                             @foreach ($table as $header)
-                                <td
+                                <td wire:key="{{ Str::uuid() }}"
                                     class="text-center {{ @$header['class'] }} {{ isset($header['actions']) ? 'table-report__action w-auto' : '' }}">
                                     @if (isset($header['key']))
                                         @if (@$header['dot'])
@@ -191,21 +192,20 @@
                                                             @endif
                                                         </a>
                                                     @endforeach
-                                                    <a href="javascript:void(0)"
+                                                    <button href="javascript:void(0)"
                                                         data-access-token="{{ $data['access_token'] }}"
-                                                        class="cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
+                                                        class="copy-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
                                                         <i data-lucide="clipboard-check"
                                                             class="h-4 w-4 text-blue-500"></i>
                                                         Copy
-                                                    </a>
-                                                    <a wire:id="{{ $data['id'] }}" wire:confirm="Are you sure you want to refresh token for this camera ?"
-                                                        wire:click="refreshToken"
+                                                    </button>
+                                                    <button
                                                         title="Refresh api token for this camera"
-                                                        class="cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
+                                                        class="regenerate-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
                                                         <i data-lucide="refresh-ccw"
                                                             class="h-4 w-4 text-green-500"></i>
                                                         Regenerate
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
                                         </div>

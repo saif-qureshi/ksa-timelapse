@@ -109,7 +109,6 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach ($data as $key => $value)
                         <tr class="intro-x relative" wire:key="{{ Str::uuid() }}">
                             @foreach ($table as $header)
@@ -193,13 +192,13 @@
                                                         </a>
                                                     @endforeach
                                                     <button href="javascript:void(0)"
-                                                        data-access-token="{{ $data['access_token'] }}"
+                                                        data-access-token="{{ $value['access_token'] }}"
                                                         class="copy-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
                                                         <i data-lucide="clipboard-check"
                                                             class="h-4 w-4 text-blue-500"></i>
                                                         Copy
                                                     </button>
-                                                    <button
+                                                    <button data-camera-id="{{ $value['id'] }}"
                                                         title="Refresh api token for this camera"
                                                         class="regenerate-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
                                                         <i data-lucide="refresh-ccw"
@@ -296,3 +295,29 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelectorAll('.regenerate-access_token').forEach(function(element) {
+        element.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (window.confirm('Are you sure. You want to refresh this access token ?')) {
+                const id = this.getAttribute('data-camera-id');
+                const path = "{{ route('camera.refresh-token', 0) }}".replace(0, id);
+                window.location.href = path;
+            }
+        });
+    });
+
+    document.querySelectorAll('.copy-access_token').forEach(function(element) {
+        element.addEventListener('click', function(e) {
+            e.preventDefault();
+            const token = this.getAttribute('data-access-token');
+            element.blur();
+            alert('Token Copied Successfully')
+            navigator.clipboard.writeText(token).then(function() {
+            }).catch(function(err) {
+                console.error('Failed to copy token: ', err);
+            });
+        });
+    });
+</script>

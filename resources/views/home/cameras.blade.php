@@ -33,7 +33,7 @@
                         class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
                         <div class="header flex items-center bg-slate-100 px-4 py-3 rounded-md">
                             <i data-lucide="cctv" class="mr-2"></i>
-                            <h3 class="mb-0">{{ $camera->name }}t</h3>
+                            <h3 class="mb-0">{{ $camera->name }}</h3>
                         </div>
                         <div class="card-body min-h-40">
                             <ul class="slider">

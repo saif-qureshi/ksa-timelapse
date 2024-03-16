@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->tinyInteger('index')->unsigned();
             $table->string('name', 191);
-            $table->string('access_token', 191)->invisible();
+            $table->string('access_token', 191);
             $table->text('description');
             $table->decimal('latitude', 10, 8);
             $table->decimal('longitude', 11, 8);

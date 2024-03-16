@@ -1,10 +1,24 @@
 <template>
   <div>
-    <a-image :src="selectedPhoto.path"  fallback="https://placehold.co/1024x1024?text=No+Image+Found"/>
+    <div class="image-wrapper">
+      <img :src="selectedPhoto.path" v-if="mode === 'single'" />
+      <div v-if="mode === 'spot-zoom'">
+        <VueMagnifier
+          :src="selectedPhoto.path"
+          :mgWidth="300"
+          :mgHeight="300"
+        />
+      </div>
+    </div>
     <div class="mt-5">
       <div>
         <label class="block mb-3">Photos Date: </label>
         <a-date-picker v-model:value="selectedDate" class="w-56" />
+        <ImageSlider
+          :photos="photos"
+          :selected="selectedPhoto.id"
+          @onSelect="handleImageSelect"
+        />
       </div>
     </div>
   </div>
@@ -13,14 +27,21 @@
 <script setup>
 import axios from "axios";
 import dayjs from "dayjs";
-import { computed, onMounted, ref } from "vue";
+import ImageSlider from "../ImageSlider.vue";
+import { onMounted, ref } from "vue";
+import VueMagnifier from "@websitebeaver/vue-magnifier";
+import "@websitebeaver/vue-magnifier/styles.css";
 
-const { camera } = defineProps({
+const { camera, mode } = defineProps({
   camera: Object,
+  mode: {
+    type: String,
+    default: null,
+  },
 });
 
 const photos = ref([]);
-const selectedDate = ref(dayjs('03-03-2024'));
+const selectedDate = ref(dayjs());
 const selectedPhoto = ref({});
 
 const getPhotos = async () => {
@@ -29,14 +50,25 @@ const getPhotos = async () => {
       date: selectedDate.value.format("YYYY-MM-DD"),
     },
   });
-	if(data.length > 0 ){
-		photos.value = data;
-		selectedPhoto.value = data[0]
-		console.log(selectedPhoto.value);
-	}
+  if (data.length > 0) {
+    photos.value = data;
+    selectedPhoto.value = data[0];
+  }
+};
+
+const emit = defineEmits(["onImageChange"]);
+
+const handleImageSelect = (photo) => {
+  selectedPhoto.value = photo;
+  emit("onImageChange", photo.path);
+};
+
+const init = async () => {
+  await getPhotos();
+  emit("onImageChange", selectedPhoto.value.path);
 };
 
 onMounted(() => {
-  getPhotos();
+  init();
 });
 </script>

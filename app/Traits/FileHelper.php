@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
@@ -58,7 +59,7 @@ trait FileHelper
         if ($file == 'faker') {
             return "faker.png";
         }
-        if (!Storage::exists(storage_path($file)) && @ $name = explode('Temps/', $file)[1]) {
+        if (!Storage::exists(storage_path($file)) && @$name = explode('Temps/', $file)[1]) {
             $to = "{$this->getFolderName($model)}/{$name}";
             Storage::move($file, $to);
             return $to;
@@ -117,7 +118,7 @@ trait FileHelper
     public function rollBackTempFile($file, $model)
     {
         $file = str_replace('Temps', $this->getFolderName($model), $file);
-        if (!Storage::exists(storage_path($file)) && @ $name = explode("{$this->getFolderName($model)}/", $file)[1]) {
+        if (!Storage::exists(storage_path($file)) && @$name = explode("{$this->getFolderName($model)}/", $file)[1]) {
             $to = "Temps/{$name}";
             Storage::move($file, $to);
             return $to;
@@ -196,8 +197,21 @@ trait FileHelper
     protected function hashImage($image, $model)
     {
         $path = pathinfo($image);
-        $extension = @ $path['extension'] ?: 'png';
+        $extension = @$path['extension'] ?: 'png';
         return $this->getFolderName($model) . '/' . Str::random(40) . '.' . $extension;
     }
 
+    public function downloadImage($url, $model)
+    {
+        $response = Http::get($url);
+
+        if ($response->successful()) {
+            $content = $response->body();
+            $imageName = time() . str::random(30) . '.' . 'png';
+            $folderPath = $this->getFolderName($model);
+            $finalPath = "{$folderPath}/{$imageName}";
+            Storage::put($finalPath, $content);
+            return $finalPath;
+        }
+    }
 }

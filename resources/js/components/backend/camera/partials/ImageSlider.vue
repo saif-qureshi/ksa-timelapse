@@ -1,7 +1,8 @@
 <template>
   <div class="mt-5">
     <div class="w-full">
-      <ul class="grid gap-2 mb-0 overflow-x-auto grid-flow-col">
+      <a-empty v-if="photos.length <= 0" description="No image available"/>
+      <ul class="grid gap-2 mb-0 overflow-x-auto grid-flow-col" v-if="photos.length > 0">
         <li
           v-for="photo in photos"
           class="relative cursor-pointer w-56"

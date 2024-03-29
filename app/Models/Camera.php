@@ -51,4 +51,9 @@ class Camera extends Model
 
         return $randomString;
     }
+
+    public function videos(): HasMany
+    {
+        return $this->hasMany(Video::class);
+    }
 }

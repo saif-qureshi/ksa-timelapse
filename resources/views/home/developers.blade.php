@@ -7,7 +7,7 @@
                     <div class="header flex items-center bg-slate-100 p-2 rounded-md">
                         <img src="{{ $developer->getImagePath('logo') }}" alt="project-img"
                             class="w-10 h-10 rounded-full mr-3">
-                        <h3 class="mb-0">{{ $developer->name }}t</h3>
+                        <h3 class="mb-0">{{ $developer->name }}</h3>
                     </div>
                     <div class="card-body p-4 min-h-40">
                         {{ $developer->description }}

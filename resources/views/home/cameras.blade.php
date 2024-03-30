@@ -19,6 +19,15 @@
             .next-arrow {
                 right: 10px;
             }
+            .grdient-color{
+                background: linear-gradient(90deg, #84a2e5 0%, #7499ea 35%, rgba(213, 225, 227, 1) 100%);
+            }
+            .grdient-color2{
+                background: linear-gradient(90deg, #87a7ed 0%, #88a7ea 100%, rgba(213, 225, 227, 1) 100%);
+            }
+            .txt-white{
+                color: white;
+            }
         </style>
 
     </x-admin.styles>
@@ -31,7 +40,7 @@
                 @foreach ($cameras as $camera)
                     <div
                         class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
-                        <div class="header flex items-center bg-slate-100 px-4 py-3 rounded-md">
+                        <div class="grdient-color header flex items-center bg-slate-100 px-4 py-3 rounded-md">
                             <i data-lucide="cctv" class="mr-2"></i>
                             <h3 class="mb-0">{{ $camera->name }}</h3>
                         </div>
@@ -50,9 +59,11 @@
                                 @endforelse
                             </ul>
                         </div>
+                       
                         <a href="{{ route('camera.show', $camera) }}"
-                            class="p-3 inline-block text-base text-center hover:underline w-full">
-                            View Camera
+                            class="grdient-color2 p-3 inline-block text-base text-left  w-full">
+                            <div class="text-sm txt-white d-block py-2 text-slate-400">Started: {{ $camera->created_at->format('d-M-Y h:i:s') }} (Arabian Standard Time)</div>
+                            <div class="text-sm txt-white d-block py-2 text-slate-400">Last Update: {{ $camera->updated_at->format('d-M-Y h:i:s') }} (Arabian Standard Time)</div>
                         </a>
                     </div>
                 @endforeach

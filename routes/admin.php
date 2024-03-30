@@ -7,11 +7,15 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\{
+    CommentController
+};
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+
+    Route::get('/dashboard', [DeveloperController::class, 'dashboardProject'])->name('dashboard');
     Route::resource('user', UserController::class);
     Route::post('developer/project', [DeveloperController::class, 'getProjectsByDeveloper']);
     Route::resource('developer', DeveloperController::class);
@@ -20,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('camera', CameraController::class);
 
     Route::get('camera/{camera}/photos',[PhotoController::class,'index'])->name('photos');
+    Route::resource('comments', CommentController::class);
 
     Route::get('home', [HomeController::class, 'developers'])->name('home.developers');
     Route::get('home/{developer}/projects', [HomeController::class, 'projects'])->name('home.developer');

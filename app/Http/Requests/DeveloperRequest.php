@@ -26,6 +26,7 @@ class DeveloperRequest extends FormRequest
             'tag' => 'required|string|max:191',
             'description' => 'required',
             'logo' => 'required',
+            'cover_photo' => 'required',
             'is_active' => 'required'
         ];
     }

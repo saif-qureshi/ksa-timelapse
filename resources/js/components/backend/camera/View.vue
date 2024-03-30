@@ -13,7 +13,8 @@
         </a-tab-pane>
       </a-tabs>
     </div>
-    <Feedback />
+    
+    <Feedback :camera-id="camera.id" />
   </div>
 </template>
 

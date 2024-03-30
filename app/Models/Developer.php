@@ -12,7 +12,7 @@ class Developer extends Model
 {
     use HasFactory, FileHelper, HasApiWhere;
 
-    protected $fillable = ['name', 'description', 'tag', 'is_active', 'logo'];
+    protected $fillable = ['name', 'description', 'tag', 'is_active', 'logo', 'cover_photo'];
 
     public function projects(): HasMany
     {

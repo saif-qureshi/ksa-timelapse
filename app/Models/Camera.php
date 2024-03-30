@@ -52,8 +52,19 @@ class Camera extends Model
         return $randomString;
     }
 
+<<<<<<< HEAD
     public function videos(): HasMany
     {
         return $this->hasMany(Video::class);
+=======
+    public function developer()
+    {
+        return $this->belongsTo(Developer::class);
+    }
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+>>>>>>> dev
     }
 }

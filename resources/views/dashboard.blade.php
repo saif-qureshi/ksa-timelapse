@@ -5,7 +5,7 @@
                 <div class="flex flex-wrap justify-between items-center">
                     <div class="stat-content">
                         <h2 class="font-bold text-lg">Projects</h2>
-                        <p>5</p>
+                        <p>{{$projects}}</p>
                     </div>
                     <div class="stat-icon">
                         <div class="p-2 rounded-full bg-blue-200">
@@ -22,7 +22,7 @@
                 <div class="flex flex-wrap justify-between items-center">
                     <div class="stat-content">
                         <h2 class="font-bold text-lg">Cameras</h2>
-                        <p>5</p>
+                        <p>{{$cameras}}</p>
                     </div>
                     <div class="stat-icon">
                         <div class="p-2 rounded-full bg-green-200">

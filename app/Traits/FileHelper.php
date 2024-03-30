@@ -149,6 +149,7 @@ trait FileHelper
     public function getImagePath($key)
     {
         $file = $this->$key;
+       
         if (empty($file) || $file == "faker.png") {
             return $this->getNoImagePath();
         }

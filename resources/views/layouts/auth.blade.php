@@ -14,11 +14,12 @@
     <div class="container sm:px-10">
         <div class="block xl:grid grid-cols-2 gap-4">
             <div class="hidden xl:flex flex-col min-h-screen">
-                <h2 style="z-index: 999;font-size: 28px;margin-top: 2rem;margin-left: 3rem; font-weight: 600;">Timelapse Masterworks</h2>
-                <h3 style="z-index: 999; font-size: 28px;margin-top: 0rem;margin-left: 3rem;font-weight: 600;">Others promise, We deliver</h3>
-                <div class="my-auto" style="display:none">
-                    <img alt="illustration" class="-intro-x w-1/2 -mt-18 bg-img"
-                        src="{{ asset('dist/images/bgm.jpg') }}">
+                <a href="{{ route('login') }}" class="-intro-x flex items-center pt-5 mt-5">
+                    <img alt="logo" class="w-auto h-12" src="{{ asset('dist/images/logo.jpg') }}">
+                </a>
+                <div class="my-auto">
+                    <img alt="illustration" class="-intro-x w-1/2 -mt-18"
+                        src="{{ asset('dist/images/illustration.svg') }}">
                     <div class="-intro-x text-white font-medium text-4xl leading-tight mt-10">
                         A few more clicks to
                         <br>
@@ -30,11 +31,6 @@
                 @yield('content')
             </div>
         </div>
-    </div>
-    <div class="absolute right-0 bottom-0 w-full"
-        style="height: 100px; background-color:#000000;display:flex; align-items:center">
-        <img alt="illustration" class="ml-auto" height="100px" width="550px"
-            src="{{ asset('dist/images/bottom.jpeg') }}">
     </div>
     @vite('resources/js/app.js')
 </body>

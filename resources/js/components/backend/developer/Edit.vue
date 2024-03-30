@@ -79,40 +79,16 @@
                                     </span>
                                 </a-form-item>
                                 <a-form-item
-                                    label="Browse Cover Photo"
-                                    class="flex-1"
+                                    label="Active Status"
+                                    class="w-1/2"
                                 >
-                                    <FileUpload
-                                        ref="coverPhotoPond"
-                                        id="cover_photo"
-                                        accept_file_types="image/jpeg, image/png"
-                                        label="Browse"
-                                        @removeFile="
-                                            onRemoveFile($event, 'cover_photo')
-                                        "
-                                        max_file_size="1MB"
-                                        @process="setImage($event, 'cover_photo')"
-                                        :my-files="data.cover_photo"
+                                    <a-switch
+                                        v-model:checked="data.is_active"
+                                        :checked-value="1"
+                                        :unchecked-value="0"
                                     />
-                                    <span
-                                        v-if="hasError('cover_photo')"
-                                        class="block mt-1 text-red-500 text-xs font-semibold"
-                                    >
-                                        {{ hasError("cover_photo") }}
-                                    </span>
                                 </a-form-item>
-                                
                             </div>
-                            <a-form-item
-                                label="Active Status"
-                                class="w-1/2"
-                            >
-                                <a-switch
-                                    v-model:checked="data.is_active"
-                                    :checked-value="1"
-                                    :unchecked-value="0"
-                                />
-                            </a-form-item>
                             <a-space class="justify-end w-full">
                                 <a-button @click="goBack"> Cancel </a-button>
                                 <a-button

@@ -9,10 +9,8 @@
                             class="w-10 h-10 rounded-full mr-3">
                         <h3 class="mb-0">{{ $developer->name }}t</h3>
                     </div>
-                    <div class="card-body p-0 min-h-40">
-                        <img src="{{ $developer->getImagePath('cover_photo') }}" alt="project-cover-img"
-                            class="w-full h-56 object-cover">   
-                       
+                    <div class="card-body p-4 min-h-40">
+                        {{ $developer->description }}
                     </div>
                 </a>
             @endforeach

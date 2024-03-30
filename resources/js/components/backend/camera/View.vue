@@ -9,14 +9,11 @@
               <span>{{ tab.label }}</span>
             </div>
           </template>
-          <component 
-            :is="tab.children" 
-            :camera="camera" 
-            v-bind="tab.props" 
-          />
+          <component :is="tab.children" :camera="camera" v-bind="tab.props"/>
         </a-tab-pane>
       </a-tabs>
     </div>
+    <Feedback />
   </div>
 </template>
 
@@ -40,8 +37,8 @@ const tabs = [
     label: "Single View",
     children: SingleView,
     props: {
-      mode: "single",
-    },
+      mode: 'single'
+    }
   },
   {
     key: 4,
@@ -49,8 +46,8 @@ const tabs = [
     label: "Side By Side",
     children: SideBySide,
     props: {
-      mode: "single",
-    },
+      mode: 'single'
+    }
   },
   {
     key: 10,
@@ -58,8 +55,8 @@ const tabs = [
     label: "Spot Zoom",
     children: SingleView,
     props: {
-      mode: "spot-zoom",
-    },
+      mode: 'spot-zoom'
+    }
   },
   {
     key: 5,
@@ -67,36 +64,38 @@ const tabs = [
     label: "Spot Compare",
     children: SpotCompare,
     props: {
-      mode: "spot-zoom",
-    },
+      mode: 'spot-zoom'
+    }
   },
   {
     key: 6,
     icon: "GitCompare",
     label: "Compare",
     children: ZoomView,
-    props: {},
+    props: {}
   },
   {
     key: 7,
     icon: "Film",
     label: "Video",
     children: ZoomView,
-    props: {},
+    props: {}
+
   },
   {
     key: 8,
     icon: "Printer",
     label: "Print",
     children: ZoomView,
-    props: {},
+    props: {}
+
   },
   {
     key: 9,
     icon: "SearchCheck",
     label: "Search",
     children: ZoomView,
-    props: {},
+    props: {}
   },
 ];
 

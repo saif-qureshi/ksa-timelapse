@@ -91,20 +91,4 @@ class DeveloperController extends Controller
 
         return response()->json($projects, 200);
     }
-
-    public function dashboardProject()
-    {
-
-        $projects = Developer::where('is_active', true)
-            ->withCount('projects')
-            ->whereHas('projects')
-            ->count();
-
-        $cameras = Project::where('is_active', true)
-            ->withCount('cameras')
-            ->whereHas('cameras')
-            ->count();
-
-        return view('dashboard', compact('projects', 'cameras'));
-    }
 }

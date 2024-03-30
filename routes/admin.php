@@ -8,14 +8,15 @@ use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\{
-    CommentController
+    CommentController,
+    DashboardController
 };
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['auth'])->group(function () {
 
-    Route::get('/dashboard', [DeveloperController::class, 'dashboardProject'])->name('dashboard');
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
     Route::resource('user', UserController::class);
     Route::post('developer/project', [DeveloperController::class, 'getProjectsByDeveloper']);
     Route::resource('developer', DeveloperController::class);

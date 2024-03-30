@@ -24,10 +24,10 @@
 import { ref } from "vue";
 import Icon from "../../Icon.vue";
 import SingleView from "./partials/tabs/SingleView.vue";
-import ZoomView from "./partials/tabs/ZoomView.vue";
-import Feedback from "./partials/Feedback.vue";
 import SideBySide from "./partials/tabs/SideBySide.vue";
 import SpotCompare from "./partials/tabs/SpotCompare.vue";
+import Compare from "./partials/tabs/Compare.vue";
+import Videos from "./partials/tabs/Videos.vue";
 
 const { camera } = defineProps({
   camera: Object,
@@ -74,30 +74,32 @@ const tabs = [
     key: 6,
     icon: "GitCompare",
     label: "Compare",
-    children: ZoomView,
-    props: {},
+    children: Compare,
+    props: {}
   },
   {
     key: 7,
     icon: "Film",
     label: "Video",
-    children: ZoomView,
-    props: {},
+    children: Videos,
+    props: {}
+
   },
-  {
-    key: 8,
-    icon: "Printer",
-    label: "Print",
-    children: ZoomView,
-    props: {},
-  },
-  {
-    key: 9,
-    icon: "SearchCheck",
-    label: "Search",
-    children: ZoomView,
-    props: {},
-  },
+  // {
+  //   key: 8,
+  //   icon: "Printer",
+  //   label: "Print",
+  //   children: ZoomView,
+  //   props: {}
+
+  // },
+  // {
+  //   key: 9,
+  //   icon: "SearchCheck",
+  //   label: "Search",
+  //   children: ZoomView,
+  //   props: {}
+  // },
 ];
 
 let activeKey = ref(1);

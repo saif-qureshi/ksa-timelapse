@@ -29,8 +29,7 @@ class SyncPhotos extends Command
     {
         $cameras = Camera::where('is_active', true)->get();
 
-        foreach($cameras as $camera) {
-            
+        foreach ($cameras as $camera) {
             $time = now()->format('H:i');
             $text = "{$camera->name} {$time}";
             $url = "https://dummyimage.com/16:9x1080/CCC/000&text={$text}";

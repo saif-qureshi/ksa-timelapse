@@ -49,7 +49,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import ImageSlider from "../ImageSlider.vue";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import VueMagnifier from "@websitebeaver/vue-magnifier";
 import "@websitebeaver/vue-magnifier/styles.css";
 import Icon from "../../../../Icon.vue";
@@ -74,8 +74,8 @@ const getPhotos = async () => {
       date: selectedDate.value.format("YYYY-MM-DD"),
     },
   });
+  photos.value = data;
   if (data.length > 0) {
-    photos.value = data;
     selectedPhoto.value = data[0];
   }
 };
@@ -95,6 +95,11 @@ const init = async () => {
 onMounted(() => {
   init();
 });
+
+watch(selectedDate, (newValue, oldValue) => {
+  getPhotos()
+});
+
 </script>
 
 <style>

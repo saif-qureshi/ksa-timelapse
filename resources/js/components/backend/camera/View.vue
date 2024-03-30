@@ -24,7 +24,6 @@
 import { ref } from "vue";
 import Icon from "../../Icon.vue";
 import SingleView from "./partials/tabs/SingleView.vue";
-import Feedback from "./partials/Feedback.vue";
 import SideBySide from "./partials/tabs/SideBySide.vue";
 import SpotCompare from "./partials/tabs/SpotCompare.vue";
 import Compare from "./partials/tabs/Compare.vue";
@@ -75,19 +74,13 @@ const tabs = [
     key: 6,
     icon: "GitCompare",
     label: "Compare",
-<<<<<<< HEAD
     children: Compare,
     props: {}
-=======
-    children: ZoomView,
-    props: {},
->>>>>>> dev
   },
   {
     key: 7,
     icon: "Film",
     label: "Video",
-<<<<<<< HEAD
     children: Videos,
     props: {}
 
@@ -107,25 +100,6 @@ const tabs = [
   //   children: ZoomView,
   //   props: {}
   // },
-=======
-    children: ZoomView,
-    props: {},
-  },
-  {
-    key: 8,
-    icon: "Printer",
-    label: "Print",
-    children: ZoomView,
-    props: {},
-  },
-  {
-    key: 9,
-    icon: "SearchCheck",
-    label: "Search",
-    children: ZoomView,
-    props: {},
-  },
->>>>>>> dev
 ];
 
 let activeKey = ref(1);

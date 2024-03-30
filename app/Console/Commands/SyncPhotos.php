@@ -27,15 +27,12 @@ class SyncPhotos extends Command
      */
     public function handle()
     {
-        $colors = ['EB5160', 'DFE0E2', 'FFDA22', '004F2D', 'E8DAB2', 'C0D6DF', 'DD6E42', 'D3F8E2', 'E4C1F9', 'FFEAAE'];
-
         $cameras = Camera::where('is_active', true)->get();
 
         foreach ($cameras as $camera) {
-            $bgColor = $colors[rand(0,10)];
             $time = now()->format('H:i');
             $text = "{$camera->name} {$time}";
-            $url = "https://dummyimage.com/16:9x1080/{$bgColor}/000&text={$text}";
+            $url = "https://dummyimage.com/16:9x1080/CCC/000&text={$text}";
 
             $camera->photos()->create([
                 'image' => $camera->downloadImage($url, Photo::class)

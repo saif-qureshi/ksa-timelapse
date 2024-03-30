@@ -7074,7 +7074,6 @@ html body {
         transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         border-radius: 100%;
         background-color: rgb(var(--color-primary) / 0.2);
-        z-index: 8;
     }
 .dark .login:before {
   --tw-bg-opacity: 1;
@@ -7095,12 +7094,11 @@ html body {
         margin-bottom: -12%;
         margin-left: -13%;
         width: 57%;
-        --tw-rotate: 0deg;
+        --tw-rotate: -4deg;
         transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         border-radius: 100%;
         --tw-bg-opacity: 1;
-        background: url('../images/bgm.jpg') center top / cover;
-        z-index: 9;
+        background-color: rgb(var(--color-primary) / var(--tw-bg-opacity));
     }
 .dark .login:after {
   --tw-bg-opacity: 1;
@@ -10904,13 +10902,6 @@ html body {
 .top-bar-boxed.top-bar-boxed--simple-menu .logo {
   width: auto;
 }
-.logo__image {
-  height: 45px !important;
-  width: 70px !important;
-  border-radius: 5px !important;
-  object-fit: cover !important;
-  object-position: left !important;
-}
 .top-bar-boxed.top-bar-boxed--simple-menu .logo .logo__text {
   display: none;
 }
@@ -13249,21 +13240,6 @@ input.vs__search::placeholder {
     --tw-shadow: 0 0 #0000;
     --tw-shadow-colored: 0 0 #0000;
     box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
-  }
-  /* talhaa */
-  nav.side-nav.cms-side {
-      width: 100px;
-      transition: all 0.3s ease-in-out;
-  }
-  nav.side-nav.cms-side ul li a .side-menu__title {
-      display: none;
-  }
-  nav.side-nav.cms-side:hover {
-    width: 260px;
-    transition: all 0.3s ease-in-out;
-  }
-  nav.side-nav.cms-side:hover ul li a .side-menu__title {
-    display: block;
   }
 }
 @media (min-width: 1536px) {

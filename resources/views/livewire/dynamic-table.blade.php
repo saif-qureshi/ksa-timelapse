@@ -153,20 +153,12 @@
                                         @if ($value->{$header['checkActive']})
                                             <div class="flex items-center justify-center text-success">
                                                 @include('vendor.icons.tick')
-                                                @if (isset($header['checkedYesLabel']))
-                                                    {{ $header['checkedYesLabel'] }}
-                                                @else
-                                                    Active
-                                                @endif
+                                                Active
                                             </div>
                                         @else
                                             <div class="flex items-center justify-center text-danger">
-                                                @include('vendor.icons.cross')
-                                                @if (isset($header['checkedNoLabel']))
-                                                    {{ $header['checkedNoLabel'] }}
-                                                @else
-                                                    Inactive
-                                                @endif
+                                                @include('vendor.icons.tick')
+                                                Inactive
                                             </div>
                                         @endif
                                     @elseif(isset($header['actions']))

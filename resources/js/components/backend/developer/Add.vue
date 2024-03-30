@@ -77,40 +77,15 @@
                                         {{ hasError("logo") }}
                                     </span>
                                 </a-form-item>
-                               
                                 <a-form-item
-                                    label="Browse Cover Photo"
-                                    class="flex-1"
+                                    label="Active Status"
+                                    class="w-1/2"
                                 >
-                                    <FileUpload
-                                        ref="coverPhotoPond"
-                                        id="cover_photo"
-                                        accept_file_types="image/jpeg, image/png"
-                                        label="Browse"
-                                        @removeFile="
-                                            onRemoveFile($event, 'cover_photo')
-                                        "
-                                        max_file_size="1MB"
-                                        @process="setImage($event, 'cover_photo')"
+                                    <a-switch
+                                        v-model:checked="data.is_active"
                                     />
-                                    <span
-                                        v-if="hasError('cover_photo')"
-                                        class="block mt-1 text-red-500 text-xs font-semibold"
-                                    >
-                                        {{ hasError("cover_photo") }}
-                                    </span>
                                 </a-form-item>
-
-
                             </div>
-                            <a-form-item
-                                label="Active Status"
-                                class="w-1/2"
-                            >
-                                <a-switch
-                                    v-model:checked="data.is_active"
-                                />
-                            </a-form-item>
                             <a-space class="justify-end w-full">
                                 <a-button> Cancel </a-button>
                                 <a-button

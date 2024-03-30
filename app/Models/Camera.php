@@ -51,14 +51,4 @@ class Camera extends Model
 
         return $randomString;
     }
-
-    public function developer()
-    {
-        return $this->belongsTo(Developer::class);
-    }
-
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
 }

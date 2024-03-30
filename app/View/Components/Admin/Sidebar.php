@@ -64,7 +64,7 @@ class Sidebar extends Component
             [
                 'name'      => 'Comments',
                 'icon'      => 'message-square-text',
-                'link'      => '#',
+                'link'      => route('comments.index'),
                 'condition' => 'dashboard',
                 'child'     => [],
             ]

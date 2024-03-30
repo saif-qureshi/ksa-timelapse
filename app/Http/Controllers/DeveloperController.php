@@ -31,6 +31,12 @@ class DeveloperController extends Controller
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Developer::class);
         }
 
+        if (isset($inputs['cover_photo']) && filled($inputs['cover_photo'])) {
+            if (str_contains($inputs['cover_photo'], 'Temps')) {
+                $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
+            }
+        }
+
         Developer::create($inputs);
 
         return response()->json('developer created successfully', Response::HTTP_CREATED);
@@ -54,6 +60,12 @@ class DeveloperController extends Controller
         if (str_contains($inputs['logo'], 'Temps'))
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Developer::class);
 
+        if (isset($inputs['cover_image']) && filled($inputs['cover_image'])) {
+            if ($developer->cover_photo != $inputs['cover_photo']) $this->deleteFile($developer->cover_photo);
+            if (str_contains($inputs['cover_photo'], 'Temps'))
+                $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
+        }
+
 
         $developer->update($inputs);
 
@@ -76,7 +88,7 @@ class DeveloperController extends Controller
         ]);
 
         $projects = Project::selectRaw('id as value, name as label')->whereIn('developer_id', $request->developers)->get();
-        
+
         return response()->json($projects, 200);
     }
 }

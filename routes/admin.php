@@ -23,7 +23,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('camera/{camera}/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
     Route::resource('camera', CameraController::class);
 
-    Route::get('camera/{camera}/photos',[PhotoController::class,'index'])->name('photos');
+    Route::get('camera/{camera}/photos', [PhotoController::class, 'index'])->name('photos');
     Route::resource('comments', CommentController::class);
 
     Route::get('home', [HomeController::class, 'developers'])->name('home.developers');

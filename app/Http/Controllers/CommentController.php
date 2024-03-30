@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Comment;
+use App\Models\Photo;
 
 class CommentController extends Controller
 {
@@ -13,7 +14,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        
+
         return view('comments.index');
     }
 
@@ -31,10 +32,16 @@ class CommentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'content' => 'required|string',
-            'user_id' => 'required|integer',
-            'camera_id' => 'required|integer',
-        ]);        
+            'message' => 'required',
+            'photo_id' => 'required|exists:photos,id'
+        ]);
+
+        auth()->user()->comments()->create([
+            'message' => $request->message,
+            'photo_id' => $request->photo_id,
+        ]);
+
+        return response()->json('Comment posted successfully.');
     }
 
     /**

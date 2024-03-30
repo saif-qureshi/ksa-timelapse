@@ -2,13 +2,16 @@
 
 namespace App\Livewire;
 
+use App\Contracts\CrudListContract;
 use Livewire\Component;
 use App\Models\Comment;
+use App\Traits\CrudListHelper;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\WithPagination;
 
-class CommentList extends Component
+class CommentList extends Component implements CrudListContract
 {
-    use WithPagination;
+    use WithPagination, CrudListHelper;
     public string $model = Comment::class;
     public $sortField = 'id';
     protected string $paginationTheme = 'tailwind';
@@ -23,30 +26,38 @@ class CommentList extends Component
         return [
             [
                 'name' => 'User',
-                'key' => 'user_id',
-               
-            ],
-            [
-                'name' => 'Comment',
-                'key' => 'content',
-                'sort' => true,
+                'html'        => true,
+                'cb'          => fn ($comment) => $comment->user->full_name
             ],
             [
                 'name' => 'Camera',
-                'key'   => 'camera_id'
+                'html'   => true,
+                'cb'   => function ($comment) {
+                    return "
+                    {$comment->photo->camera->developer->name}</br>
+                    {$comment->photo->camera->project->name}</br>
+                    {$comment->photo->camera->name}</br>
+                    ";
+                }
+            ],
+            [
+                'name' => 'Comment',
+                'key' => 'message',
             ],
             [
                 'name' => 'Approved',
-                'key'   => 'approved'
+                'checkActive' => 'is_approved',
+                'checkedYesLabel' => "Yes",
+                'checkedNoLabel' => "No",
             ],
             [
                 'name'    => 'Action',
                 'actions' => [
                     [
-                        'name'  => 'Edit',
+                        'name'  => 'Approve',
                         'icon'  => 'tick',
                         'route' => function ($comments) {
-                            return route('comments.edit', $comments->id);
+                            return route('comments.update', $comments->id);
                         }
                     ],
                     [
@@ -64,22 +75,22 @@ class CommentList extends Component
 
     public function getTableName(): string
     {
-        return 'Comments';
+        return 'comments';
     }
 
 
-    public function getWith(): ?string
+    public function getWith(): string|array|null
     {
-        return "";
+        return ['user', 'photo', 'photo.camera', 'photo.camera.developer', 'photo.camera.project'];
     }
 
     public function getSearchOptions(): array
     {
         return [
             'enabled'      => true,
-            'placeholder'  => 'Search by Name',
+            'placeholder'  => 'Search by message',
             'searchFields' => [
-                'name',
+                'message',
             ]
         ];
     }
@@ -100,15 +111,5 @@ class CommentList extends Component
     public function getExtraQuery($query): ?Builder
     {
         return $query;
-    }
-
-    public function render()
-    {
-        $comments = Comment::with('camera','user')->paginate(10);
-        return view('livewire.pages.comment-list')
-            ->with([
-                'data'    =>  $comments,
-                'table'   => $this->buildTable(),
-            ]);
     }
 }

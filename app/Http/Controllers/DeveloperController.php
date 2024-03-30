@@ -30,8 +30,11 @@ class DeveloperController extends Controller
         if (str_contains($inputs['logo'], 'Temps')) {
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Developer::class);
         }
-        if (str_contains($inputs['cover_photo'], 'Temps')) {
-            $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
+
+        if (isset($inputs['cover_photo']) && filled($inputs['cover_photo'])) {
+            if (str_contains($inputs['cover_photo'], 'Temps')) {
+                $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
+            }
         }
 
         Developer::create($inputs);
@@ -57,11 +60,13 @@ class DeveloperController extends Controller
         if (str_contains($inputs['logo'], 'Temps'))
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Developer::class);
 
-        if ($developer->cover_photo != $inputs['cover_photo']) $this->deleteFile($developer->cover_photo);
+        if (isset($inputs['cover_image']) && filled($inputs['cover_image'])) {
+            if ($developer->cover_photo != $inputs['cover_photo']) $this->deleteFile($developer->cover_photo);
+            if (str_contains($inputs['cover_photo'], 'Temps'))
+                $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
+        }
 
-        if (str_contains($inputs['cover_photo'], 'Temps'))
-            $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
-    
+
         $developer->update($inputs);
 
         return response()->json('developer updated successfully', Response::HTTP_NO_CONTENT);
@@ -83,23 +88,23 @@ class DeveloperController extends Controller
         ]);
 
         $projects = Project::selectRaw('id as value, name as label')->whereIn('developer_id', $request->developers)->get();
-        
+
         return response()->json($projects, 200);
     }
 
     public function dashboardProject()
     {
-       
+
         $projects = Developer::where('is_active', true)
-                                ->withCount('projects')
-                                ->whereHas('projects')
-                                ->count();
+            ->withCount('projects')
+            ->whereHas('projects')
+            ->count();
 
         $cameras = Project::where('is_active', true)
-                                ->withCount('cameras')
-                                ->whereHas('cameras')
-                                ->count();
-       
+            ->withCount('cameras')
+            ->whereHas('cameras')
+            ->count();
+
         return view('dashboard', compact('projects', 'cameras'));
     }
 }

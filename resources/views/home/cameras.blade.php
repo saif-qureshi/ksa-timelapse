@@ -19,13 +19,16 @@
             .next-arrow {
                 right: 10px;
             }
-            .grdient-color{
+
+            .grdient-color {
                 background: linear-gradient(90deg, #84a2e5 0%, #7499ea 35%, rgba(213, 225, 227, 1) 100%);
             }
-            .grdient-color2{
+
+            .grdient-color2 {
                 background: linear-gradient(90deg, #87a7ed 0%, #88a7ea 100%, rgba(213, 225, 227, 1) 100%);
             }
-            .txt-white{
+
+            .txt-white {
                 color: white;
             }
         </style>
@@ -53,17 +56,19 @@
                                     </li>
                                 @empty
                                     <li>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png" alt="sadas"
-                                            class="w-full h-56 object-cover">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"
+                                            alt="sadas" class="w-full h-56 object-cover">
                                     </li>
                                 @endforelse
                             </ul>
                         </div>
-                       
+
                         <a href="{{ route('camera.show', $camera) }}"
                             class="grdient-color2 p-3 inline-block text-base text-left  w-full">
-                            <div class="text-sm txt-white d-block py-2 text-slate-400">Started: {{ $camera->created_at->format('d-M-Y h:i:s') }} (Arabian Standard Time)</div>
-                            <div class="text-sm txt-white d-block py-2 text-slate-400">Last Update: {{ $camera->updated_at->format('d-M-Y h:i:s') }} (Arabian Standard Time)</div>
+                            <p class="text-sm txt-white text-white mb-1">Started:
+                                {{ $camera->created_at->format('d-M-Y h:i A') }} (Arabian Standard Time)</p>
+                            <p class="text-sm txt-white text-white">Last Update:
+                                {{ $camera->updated_at->format('d-M-Y h:i A') }} (Arabian Standard Time)</p>
                         </a>
                     </div>
                 @endforeach

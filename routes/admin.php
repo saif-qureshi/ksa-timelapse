@@ -27,9 +27,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
         Route::post('/photos', [PhotoController::class, 'index'])->name('photos');
         Route::resource('videos', VideoController::class)->only(['index', 'store', 'destroy']);
-        // Route::get('/video', [VideoController::class, 'index']);
-        // Route::post('/video', [VideoController::class, 'store']);
-        // Route::delete('/video/{video}', [VideoController::class, 'destroy']);
     });
 
     Route::resource('camera', CameraController::class);

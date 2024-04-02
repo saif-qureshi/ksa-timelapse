@@ -22,18 +22,20 @@ Route::middleware(['auth'])->group(function () {
     Route::post('developer/project', [DeveloperController::class, 'getProjectsByDeveloper']);
     Route::resource('developer', DeveloperController::class);
     Route::resource('project', ProjectController::class);
-    
+
     Route::group(['prefix' => 'camera/{camera}'], function () {
         Route::get('/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
         Route::post('/photos', [PhotoController::class, 'index'])->name('photos');
-        Route::get('/video', [VideoController::class, 'index']);
-        Route::post('/video', [VideoController::class, 'store']);
+        Route::resource('videos', VideoController::class)->only(['index', 'store', 'destroy']);
+        // Route::get('/video', [VideoController::class, 'index']);
+        // Route::post('/video', [VideoController::class, 'store']);
+        // Route::delete('/video/{video}', [VideoController::class, 'destroy']);
     });
 
     Route::resource('camera', CameraController::class);
     Route::resource('comments', CommentController::class);
 
-    Route::group(['prefix'=> 'home'], function() {
+    Route::group(['prefix' => 'home'], function () {
         Route::get('/', [HomeController::class, 'developers'])->name('home.developers');
         Route::get('/{developer}/projects', [HomeController::class, 'projects'])->name('home.developer');
         Route::get('/{project}/cameras', [HomeController::class, 'cameras'])->name('home.project');

@@ -2,7 +2,7 @@
   <div class="">
     <div class="space-x-2">
       <a-range-picker v-model:value="dates" />
-      <a-button @click="getPhotos"> Search </a-button>
+      <a-button @click="getPhotos" :loading="searching"> Search </a-button>
       <!-- <a-button
         type="primary"
         class="bg-blue-500"
@@ -45,6 +45,7 @@ const { camera } = defineProps({
   camera: Object,
 });
 
+const searching = ref(false);
 const loading = ref(false);
 const photos = ref([]);
 const dates = ref([
@@ -55,7 +56,7 @@ const dates = ref([
 const generateTimelapse = async () => {
   try {
     loading.value = true;
-    await axios.post(`/camera/${camera.id}/video`, {
+    await axios.post(`/camera/${camera.id}/videos`, {
       start_date: dates.value[0]?.format("YYYY-MM-DD"),
       end_date: dates.value[1]?.format("YYYY-MM-DD"),
     });
@@ -76,14 +77,19 @@ const generateTimelapse = async () => {
 };
 
 const getPhotos = async () => {
-  const { data } = await axios.post(`/camera/${camera.id}/photos`, {
-    range: true,
-    start_date: dates.value[0],
-    end_date: dates.value[1],
-  });
-  photos.value = data;
-  if (data.length > 0) {
-    selectedPhoto.value = data[0];
+  try {
+    searching.value = true;
+    const { data } = await axios.post(`/camera/${camera.id}/photos`, {
+      range: true,
+      start_date: dates.value[0],
+      end_date: dates.value[1],
+    });
+    photos.value = data;
+  } catch (error) {
+    console.error(error);
+    message.error("Something went wrong");
+  } finally {
+    searching.value = false;
   }
 };
 

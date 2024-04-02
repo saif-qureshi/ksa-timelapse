@@ -9,7 +9,8 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\{
     CommentController,
-    DashboardController
+    DashboardController,
+    VideoController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -21,15 +22,22 @@ Route::middleware(['auth'])->group(function () {
     Route::post('developer/project', [DeveloperController::class, 'getProjectsByDeveloper']);
     Route::resource('developer', DeveloperController::class);
     Route::resource('project', ProjectController::class);
-    Route::get('camera/{camera}/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
-    Route::resource('camera', CameraController::class);
+    
+    Route::group(['prefix' => 'camera/{camera}'], function () {
+        Route::get('/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
+        Route::post('/photos', [PhotoController::class, 'index'])->name('photos');
+        Route::get('/video', [VideoController::class, 'index']);
+        Route::post('/video', [VideoController::class, 'store']);
+    });
 
-    Route::get('camera/{camera}/photos', [PhotoController::class, 'index'])->name('photos');
+    Route::resource('camera', CameraController::class);
     Route::resource('comments', CommentController::class);
 
-    Route::get('home', [HomeController::class, 'developers'])->name('home.developers');
-    Route::get('home/{developer}/projects', [HomeController::class, 'projects'])->name('home.developer');
-    Route::get('home/{project}/cameras', [HomeController::class, 'cameras'])->name('home.project');
+    Route::group(['prefix'=> 'home'], function() {
+        Route::get('/', [HomeController::class, 'developers'])->name('home.developers');
+        Route::get('/{developer}/projects', [HomeController::class, 'projects'])->name('home.developer');
+        Route::get('/{project}/cameras', [HomeController::class, 'cameras'])->name('home.project');
+    });
 
     Route::group(['prefix' => 'image', 'as' => 'image.'], static function () {
         Route::get('/fetch', [FileUploadController::class, 'fetchGallery'])->name('gallery.fetch');

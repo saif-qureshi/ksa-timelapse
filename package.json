@@ -24,6 +24,7 @@
         "@websitebeaver/vue-magnifier": "^1.1.0",
         "ant-design-vue": "^4.1.2",
         "dayjs": "^1.11.10",
+        "dayjs-plugin-utc": "^0.1.2",
         "filepond-plugin-file-validate-size": "^2.2.8",
         "filepond-plugin-file-validate-type": "^1.2.9",
         "filepond-plugin-image-preview": "^4.6.12",

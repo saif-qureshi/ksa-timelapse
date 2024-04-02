@@ -142,14 +142,20 @@ trait FileHelper
     {
         $class = $model ?: get_class();
 
-        return Str::of($class)->afterLast('\\')->before('Controller')->kebab()
+        $folder = Str::of($class)->afterLast('\\')->before('Controller')->kebab()
             ->slug('_')->plural();
+
+        if (!File::isDirectory($dir = storage_path('app/public') . '/' . $folder)) {
+            File::makeDirectory($dir);
+        }
+
+        return $folder;
     }
 
     public function getImagePath($key)
     {
         $file = $this->$key;
-       
+
         if (empty($file) || $file == "faker.png") {
             return $this->getNoImagePath();
         }
@@ -184,9 +190,7 @@ trait FileHelper
     {
         try {
             $image = $this->hashImage($url, $model);
-            if (!File::isDirectory($dir = storage_path('app/public') . '/' . $this->getFolderName($model))) {
-                File::makeDirectory($dir);
-            }
+
 
             Storage::put($image, file_get_contents($url));
             return $image;

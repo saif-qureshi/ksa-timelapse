@@ -31,8 +31,7 @@ class SyncPhotos extends Command
 
         foreach ($cameras as $camera) {
             $time = now()->format('H:i');
-            $text = "{$camera->name} {$time}";
-            $url = "https://dummyimage.com/16:9x1080/CCC/000&text={$text}";
+            $url = "https://dummyimage.com/16:9x1080/CCC/000&text={$time}";
 
             $camera->photos()->create([
                 'image' => $camera->downloadImage($url, Photo::class)

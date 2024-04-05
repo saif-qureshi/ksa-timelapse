@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Jobs\CreateTimelapseVideo;
 use App\Models\Camera;
-use App\Rules\MaxDateForVideo;
+use App\Models\Video;
+use App\Traits\FileHelper;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class VideoController extends Controller
 {
+    use FileHelper;
 
     public function index(Camera $camera, Request $request)
     {
         $videos = $camera->videos()
             ->whereDate('start_date', '>=', $request->start_date)
-            ->whereDate('end_date', '<=', $request->end_date)
+            ->orWhereDate('end_date', '<=', $request->end_date)
+            ->where('status', 'completed')
+            ->latest()
             ->get();
 
         return response()->json($videos);
@@ -57,5 +61,14 @@ class VideoController extends Controller
         CreateTimelapseVideo::dispatch($video, $photos);
 
         return response()->json('Timelapse is being generate');
+    }
+
+    public function destroy(Camera $camera, Video $video)
+    {
+        $this->deleteFile($video->file);
+
+        $video->delete();
+
+        return response()->json('Video deleted successfully');
     }
 }

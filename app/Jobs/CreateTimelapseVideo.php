@@ -93,10 +93,10 @@ class CreateTimelapseVideo implements ShouldQueue
         return [
             'ffmpeg',
             '-f', 'concat',
-            '-r', '25',
+            '-r', '5',
             '-safe', '0',
             '-i', Str::replace('/', DIRECTORY_SEPARATOR, Storage::path($photoListFilePath)),
-            '-framerate', '25',
+            '-framerate', '5',
             '-s:v', '1440x1080',
             '-c:v', 'libx264',
             '-crf', '17',

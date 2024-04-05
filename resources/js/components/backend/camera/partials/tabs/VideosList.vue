@@ -11,9 +11,7 @@
     >
       <template #bodyCell="{ column, record }">
         <template v-if="column.key === 'status'">
-          <a-tag class="capitalize" :color="getTagColor(record.status)">{{
-            record.status
-          }}</a-tag>
+          <a-tag class="capitalize" color="green">{{ record.status }}</a-tag>
         </template>
         <template v-if="column.key === 'action'">
           <a-space>
@@ -32,6 +30,13 @@
               >
                 <Icon name="Play" size="16" />
               </a-button>
+            </a-tooltip>
+            <a-tooltip title="Delete video">
+              <a-popconfirm title="Delete Video" description="Are you sure you want to delete ?" @confirm="() => deleteVideo(record.id)">
+                <a-button class="w-8 h-8 flex justify-center items-center p-0">
+                  <Icon name="Trash" size="16" />
+                </a-button>
+              </a-popconfirm>
             </a-tooltip>
           </a-space>
         </template>
@@ -96,7 +101,7 @@ const columns = [
 const getVideos = async () => {
   try {
     loading.value = true;
-    const { data } = await axios.get(`/camera/${camera.id}/video`, {
+    const { data } = await axios.get(`/camera/${camera.id}/videos`, {
       params: {
         start_date: dates.value[0]?.format("YYYY-MM-DD"),
         end_date: dates.value[1]?.format("YYYY-MM-DD"),
@@ -111,6 +116,16 @@ const getVideos = async () => {
   }
 };
 
+const deleteVideo = async (id) => {
+  try {
+    await axios.delete(`/camera/${camera.id}/videos/${id}`);
+    getVideos();
+  } catch (error) {
+    console.error(error);
+    message.error("Something went wrong");
+  }
+};
+
 const downloadVideo = async (record) => {
   try {
     const response = await axios.get(record.path, {
@@ -119,12 +134,12 @@ const downloadVideo = async (record) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", record.src.replace("video/", ""));
+    link.setAttribute("download", record.file.replace("video/", ""));
     document.body.appendChild(link);
     link.click();
     window.URL.revokeObjectURL(url);
   } catch (error) {
-    console.error("Error downloading video:", error);
+    console.error(error);
     message.error("Error while downloading video");
   }
 };
@@ -132,19 +147,6 @@ const downloadVideo = async (record) => {
 const playVideo = (record) => {
   selectedVideoSrc.value = record.path;
   playVideoModal.value = true;
-};
-
-const getTagColor = (status) => {
-  switch (status) {
-    case "pending":
-      return "yellow";
-    case "completed":
-      return "green";
-    case "failed":
-      return "red";
-    default:
-      return "";
-  }
 };
 
 onMounted(() => {

@@ -4,7 +4,7 @@
             $currentRoute = Route::currentRouteName();
             $routeParts = explode('.', $currentRoute);
             $firstSlugPart = reset($routeParts);
-        @endphp ?>
+        @endphp
         @foreach ($menu as $item)
             <li>
                 <a class="NN side-menu @if ($firstSlugPart == strtolower($item->get('name'))) side-menu--active @endif"

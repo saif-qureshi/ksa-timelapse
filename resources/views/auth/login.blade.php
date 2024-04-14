@@ -41,9 +41,9 @@
                     <input type="checkbox" name="remember_me" value="1" class="input border mr-2" id="remember-me">
                     <label class="cursor-pointer select-none" for="remember-me">Keep me login</label>
                 </div>
-                <div class="text-slate-600 dark:text-slate-500 text-xs sm:text-sm">
+                {{-- <div class="text-slate-600 dark:text-slate-500 text-xs sm:text-sm">
                     <a href="{{ route('password.request') }}">Forgot Password?</a>
-                </div>
+                </div> --}}
             </div>
             <div class="intro-x flex mt-10 text-center xl:text-left">
                 <button type="submit" class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top">

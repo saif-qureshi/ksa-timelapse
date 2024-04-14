@@ -10,46 +10,13 @@
 </head>
 
 <body class="py-5 md:py-0">
-    <div class="mobile-menu md:hidden">
-        <div class="mobile-menu-bar">
-            <a href="" class="flex mr-auto">
-                <img alt="Midone - HTML Admin Template" class="w-full h-14 object-cover object-left rounded-md"
-                    src="{{ asset('dist/images/logo.jpg') }}">
-            </a>
-            <a href="javascript:;" id="mobile-menu-toggler"> <i data-lucide="bar-chart-2"
-                    class="w-8 h-8 text-white transform -rotate-90"></i> </a>
-        </div>
-        <ul class="border-t border-white/[0.08] py-5 hidden">
-            {{-- <li>
-                <a href="javascript:;.html" class="menu menu--active">
-                    <div class="menu__icon"><i data-lucide="home"></i></div>
-                    <div class="menu__title"> Dashboard <i data-lucide="chevron-down"
-                            class="menu__sub-icon transform rotate-180"></i></div>
-                </a>
-                <ul class="menu__sub-open">
-                    <li>
-                        <a href="side-menu-dark-dashboard-overview-1.html" class="menu menu--active">
-                            <div class="menu__icon"><i data-lucide="activity"></i></div>
-                            <div class="menu__title"> Overview 1</div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="side-menu-dark-inbox.html" class="menu">
-                    <div class="menu__icon"><i data-lucide="inbox"></i></div>
-                    <div class="menu__title"> Inbox</div>
-                </a>
-            </li> --}}
-        </ul>
-    </div>
+    <x-admin.mobile-menu />
     <div
         class="top-bar-boxed h-[70px] md:h-[65px] z-[51] border-b border-white/[0.08] -mt-7 md:mt-0 -mx-3 sm:-mx-8 md:-mx-0 px-3 md:border-b-0 relative md:fixed md:inset-x-0 md:top-0 sm:px-8 md:px-10 md:pt-10 md:bg-gradient-to-b md:from-slate-100 md:to-transparent dark:md:from-darkmode-700">
         <div class="h-full flex items-center">
 
             <a href="" class="logo -intro-x hidden md:flex">
-                <img alt="{{ config('app.name') }}" class="logo__image"
-                    src="{{ asset('dist/images/logo.jpg') }}">
+                <img alt="{{ config('app.name') }}" class="logo__image" src="{{ asset('dist/images/logo.jpg') }}">
             </a>
 
             <x-admin.breadcrumbs title="{{ $title }}" />
@@ -57,7 +24,8 @@
             <div class="intro-x dropdown w-8 h-8">
                 <div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
                     role="button" aria-expanded="false" data-tw-toggle="dropdown">
-                    <img alt="{{ auth()->user()->full_name }}" src="https://ui-avatars.com/api/?name={{ auth()->user()->full_name }}">
+                    <img alt="{{ auth()->user()->full_name }}"
+                        src="https://ui-avatars.com/api/?name={{ auth()->user()->full_name }}">
                 </div>
                 <div class="dropdown-menu w-56">
                     <ul
@@ -84,7 +52,7 @@
                     </ul>
                 </div>
             </div>
-            
+
         </div>
     </div>
     <div class="flex overflow-hidden">

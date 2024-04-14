@@ -33,6 +33,10 @@ class ProjectController extends Controller
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Project::class);
         }
 
+        if (str_contains($inputs['cover_photo'], 'Temps')) {
+            $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Project::class);
+        }
+
         Project::create($inputs);
 
         return response()->json('project created successfully', Response::HTTP_CREATED);
@@ -55,9 +59,13 @@ class ProjectController extends Controller
         $inputs = $request->validated();
 
         if ($project->logo != $inputs['logo']) $this->deleteFile($project->logo);
+        if ($project->logo != $inputs['cover_photo']) $this->deleteFile($project->cover_photo);
 
         if (str_contains($inputs['logo'], 'Temps'))
             $inputs['logo'] = $this->moveFileFromTempAndGetName($inputs['logo'], Developer::class);
+
+        if (str_contains($inputs['cover_photo'], 'Temps'))
+            $inputs['cover_photo'] = $this->moveFileFromTempAndGetName($inputs['cover_photo'], Developer::class);
 
 
         $project->update($inputs);

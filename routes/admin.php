@@ -30,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::resource('camera', CameraController::class);
+    Route::get('comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
     Route::resource('comments', CommentController::class);
 
     Route::group(['prefix' => 'home'], function () {

@@ -1,4 +1,4 @@
-<x-admin.layout title="Edit Developer">
+<x-admin.layout title="Edit Project">
     <div id="backend-app">
         <edit-project :developers="{{ $developers->toJson() }}" :project="{{ $project->toJson() }}"/>
     </div>

@@ -12,7 +12,7 @@ class Project extends Model
 {
     use HasFactory, FileHelper, HasApiWhere;
 
-    protected $fillable = ['name', 'tag', 'description', 'developer_id', 'logo', 'is_active'];
+    protected $fillable = ['name', 'tag', 'description', 'developer_id', 'logo', 'cover_photo', 'is_active'];
 
     public function cameras(): HasMany
     {

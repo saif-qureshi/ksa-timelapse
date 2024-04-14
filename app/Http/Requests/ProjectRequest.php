@@ -27,6 +27,7 @@ class ProjectRequest extends FormRequest
             'developer_id' => 'required|exists:developers,id',
             'description' => 'required',
             'logo' => 'required',
+            'cover_photo' => 'required',
             'is_active' => 'required'
         ];
     }

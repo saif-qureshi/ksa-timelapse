@@ -100,8 +100,6 @@
                                         {{ hasError("cover_photo") }}
                                     </span>
                                 </a-form-item>
-
-
                             </div>
                             <a-form-item
                                 label="Active Status"

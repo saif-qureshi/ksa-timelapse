@@ -26,13 +26,13 @@ class Sidebar extends Component
                 'condition' => 'home',
                 'child'     => [],
             ],
-            [
-                'name'      => 'Downloads',
-                'icon'      => 'download',
-                'link'      => '#',
-                'condition' => 'dashboard',
-                'child'     => [],
-            ],
+            // [
+            //     'name'      => 'Downloads',
+            //     'icon'      => 'download',
+            //     'link'      => '#',
+            //     'condition' => 'dashboard',
+            //     'child'     => [],
+            // ],
             [
                 'name'      => 'Users',
                 'icon'      => 'users',

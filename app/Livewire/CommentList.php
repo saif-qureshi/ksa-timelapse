@@ -56,18 +56,18 @@ class CommentList extends Component implements CrudListContract
                     [
                         'name'  => 'Approve',
                         'icon'  => 'tick',
-                        'route' => function ($comments) {
-                            return route('comments.update', $comments->id);
+                        'route' => function ($comment) {
+                            return route('comments.approve', $comment->id);
                         }
                     ],
-                    [
-                        'name'  => 'Delete',
-                        'class' => 'deleteBtn text-danger',
-                        'icon'  => 'dustbin',
-                        'route' => function ($comments) {
-                            return route('comments.destroy', $comments->id);
-                        }
-                    ]
+                    // [
+                    //     'name'  => 'Delete',
+                    //     'class' => 'deleteBtn text-danger',
+                    //     'icon'  => 'dustbin',
+                    //     'route' => function ($comment) {
+                    //         return route('comments.destroy', $comment->id);
+                    //     }
+                    // ]
                 ]
             ]
         ];

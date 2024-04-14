@@ -14,7 +14,11 @@
                                 class="w-10 h-10 rounded-full mr-3">
                             <h3 class="mb-0">{{ $project->name }}</h3>
                         </div>
-                        <div class="card-body p-4 min-h-40">
+                        <div class="card-body p-0 min-h-40">
+                            <img src="{{ $project->getImagePath('cover_photo') }}" alt="project-cover-img"
+                                class="w-full h-56 object-cover">
+                        </div>
+                        <div class="card-body p-4">
                             {{ $project->description }}
                         </div>
                     </a>

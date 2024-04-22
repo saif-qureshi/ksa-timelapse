@@ -21,7 +21,7 @@ class PhotoController extends Controller
 
         $camera = Camera::where('access_token', $token)->first();
 
-        Log::info($request->file('image'));
+        $request->file('image')->store('Temps');
 
         $camera->photos()->create([
             'image' => $this->saveFileAndGetName($request->file('image'), Photo::class)

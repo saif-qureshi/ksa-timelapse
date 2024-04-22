@@ -15,17 +15,19 @@ class PhotoController extends Controller
 
     public function store(PhotoRequest $request)
     {
-        Log::info('Photo started uploading.' . now()->setTimezone('Asia/Karachi')->toDateString());
+        Log::info('Photo started uploading .' . now()->setTimezone('Asia/Karachi')->toDateTimeString());
 
         $token = $request->header('X-Cam-Auth');
 
         $camera = Camera::where('access_token', $token)->first();
 
+        Log::info($request->file('image'));
+
         $camera->photos()->create([
             'image' => $this->saveFileAndGetName($request->file('image'), Photo::class)
         ]);
 
-        Log::info('Photo uploaded successfully.' . now()->setTimezone('Asia/Karachi')->toDateString());
+        Log::info('Photo uploaded successfully .' . now()->setTimezone('Asia/Karachi')->toDateTimeString());
 
         return response()->json('Photo uploaded successfully', 200);
     }

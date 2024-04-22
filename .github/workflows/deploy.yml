@@ -25,5 +25,5 @@ jobs:
             git stash
             git pull origin dev
             php artisan migrate
-            # npm install
-            # npm run build
+            npm install
+            npm run build

@@ -24,7 +24,7 @@ class PhotoController extends Controller
         $request->file('image')->store('Temps');
 
         $camera->photos()->create([
-            'image' => $this->saveFileAndGetName($request->file('image'), Photo::class)
+            'image' => $request->file('image')->store('Photos'),
         ]);
 
         Log::info('Photo uploaded successfully .' . now()->setTimezone('Asia/Karachi')->toDateTimeString());

@@ -21,4 +21,4 @@ use App\Http\Controllers\Api\{
 //     return $request->user();
 // });
 
-Route::post('photo', [PhotoController::class, 'store']);
+Route::post('/photo', [PhotoController::class, 'store']);

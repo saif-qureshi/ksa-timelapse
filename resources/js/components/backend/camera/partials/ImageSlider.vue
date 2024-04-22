@@ -10,7 +10,7 @@
           :key="photo.image"
           @click="() => selectPhoto(photo)"
         >
-          <img :src="photo.path" :alt="photo.image" class="h-auto w-full" />
+          <img :src="photo.path" :alt="photo.image" class="h-full w-full object-contain" />
           <div
             class="absolute flex justify-end items-start top-[50%] left-[50%] bg-black/30 w-full h-full translate-x-[-50%] translate-y-[-50%]"
           >

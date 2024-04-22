@@ -27,11 +27,6 @@ class PhotoRequest extends FormRequest
         ];
     }
 
-    public function wantsJson()
-    {
-        return true;
-    }
-
     public function validateToken()
     {
 

@@ -23,7 +23,15 @@ class PhotoController extends Controller
             ->latest()
             ->get();
 
-        return response()->json(['photos' => $photos, 'dates' => $this->getDatesWithoutData($camera)]);
+        $response = [
+            'photos' => $photos,
+        ];
+
+        if ($request->has('date')) {
+            $response['dates'] = $this->getDatesWithoutData($camera);
+        }
+
+        return response()->json($response);
     }
 
     public function getDatesWithoutData(Camera $camera)

@@ -13,7 +13,6 @@ import EditUser from "./components/backend/user/Edit.vue";
 import AddCamera from "./components/backend/camera/Add.vue"
 import EditCamera from "./components/backend/camera/Edit.vue"
 import ViewCamera from "./components/backend/camera/View.vue"
-import VueCompareImage from 'vue3-compare-image'
 
 const app = createApp({});
 

@@ -12,19 +12,7 @@
           Full Screen
         </a-button>
         <div class="" ref="imageRef">
-          <!-- <a-button
-            v-if="showFullScreen"
-            class="absolute top-[50%] translate-y-[-50%] bg-black left-2"
-          >
-            <Icon name="ChevronLeft" :size="20" color="#fff" />
-          </a-button> -->
           <img :src="selectedPhoto.path" />
-          <!-- <a-button
-            v-if="showFullScreen"
-            class="absolute top-[50%] translate-y-[-50%] bg-black right-2"
-          >
-            <Icon name="ChevronRight" :size="20" color="#fff" />
-          </a-button> -->
         </div>
 
         <div v-if="showFullScreen" class="full-screen-overlay">
@@ -44,11 +32,20 @@
           :mgHeight="300"
         />
       </div>
+      <div v-if="mode === 'zoom'">
+        <Panzoom>
+          <img :src="selectedPhoto.path" alt="Image" />
+        </Panzoom>
+      </div>
     </div>
     <div class="mt-5">
       <div>
         <label class="block mb-3">Photos Date: </label>
-        <a-date-picker v-model:value="selectedDate" class="w-56" />
+        <a-date-picker
+          v-model:value="selectedDate"
+          class="w-56"
+          :disabled-date="getDisableDates"
+        />
         <ImageSlider
           :photos="photos"
           :selected="selectedPhoto.id"
@@ -69,6 +66,7 @@ import VueMagnifier from "@websitebeaver/vue-magnifier";
 import "@websitebeaver/vue-magnifier/styles.css";
 import Icon from "../../../../Icon.vue";
 import Feedback from "../Feedback.vue";
+import Panzoom from "../../../../Panzoom.vue";
 
 const { camera, mode } = defineProps({
   camera: Object,
@@ -80,17 +78,21 @@ const { camera, mode } = defineProps({
 
 const imageRef = ref(null);
 const photos = ref([]);
+const disabledDates = ref([]);
 const selectedDate = ref(dayjs());
 const selectedPhoto = ref({});
 const showFullScreen = ref(false);
 
 const getPhotos = async () => {
-  const { data } = await axios.post(`/camera/${camera.id}/photos`, {
+  const {
+    data: { photos: dbPhotos, dates },
+  } = await axios.post(`/camera/${camera.id}/photos`, {
     date: selectedDate.value.format("YYYY-MM-DD"),
   });
-  photos.value = data;
-  if (data.length > 0) {
-    selectedPhoto.value = data[0];
+  photos.value = dbPhotos;
+  disabledDates.value = dates;
+  if (dbPhotos.length > 0) {
+    selectedPhoto.value = dbPhotos[0];
   }
 };
 
@@ -111,6 +113,12 @@ const toggleFullScreen = () => {
   }
 };
 
+const getDisableDates = (current) => {
+  return disabledDates.value.find(
+    (date) => date === dayjs(current).format("YYYY-MM-DD")
+  );
+};
+
 const emit = defineEmits(["onImageChange"]);
 
 const handleImageSelect = (photo) => {
@@ -127,7 +135,7 @@ onMounted(() => {
   init();
 });
 
-watch(selectedDate, (newValue, oldValue) => {
+watch(selectedDate, () => {
   getPhotos();
 });
 </script>

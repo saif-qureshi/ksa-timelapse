@@ -9,11 +9,7 @@
               <span>{{ tab.label }}</span>
             </div>
           </template>
-          <component 
-            :is="tab.children" 
-            :camera="camera" 
-            v-bind="tab.props" 
-          />
+          <component :is="tab.children" :camera="camera" v-bind="tab.props" />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -46,7 +42,16 @@ const tabs = [
     },
   },
   {
-    key: 4,
+    key: 2,
+    icon: "ZoomIn",
+    label: "Zoom",
+    children: ZoomView,
+    props: {
+      mode: "zoom",
+    },
+  },
+  {
+    key: 3,
     icon: "Columns2",
     label: "Side By Side",
     children: SideBySide,
@@ -55,7 +60,7 @@ const tabs = [
     },
   },
   {
-    key: 10,
+    key: 4,
     icon: "Search",
     label: "Spot Zoom",
     children: SingleView,
@@ -77,22 +82,21 @@ const tabs = [
     icon: "GitCompare",
     label: "Compare",
     children: Compare,
-    props: {}
+    props: {},
   },
   {
     key: 7,
     icon: "Film",
     label: "Video",
     children: VideosList,
-    props: {}
-
+    props: {},
   },
   {
-    key: 9,
+    key: 8,
     icon: "SearchCheck",
     label: "Search",
     children: VideoGenerate,
-    props: {}
+    props: {},
   },
 ];
 

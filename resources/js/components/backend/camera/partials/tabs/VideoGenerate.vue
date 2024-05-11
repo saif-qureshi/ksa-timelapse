@@ -79,12 +79,12 @@ const generateTimelapse = async () => {
 const getPhotos = async () => {
   try {
     searching.value = true;
-    const { data } = await axios.post(`/camera/${camera.id}/photos`, {
+    const { data: { photos: dbPhotos } } = await axios.post(`/camera/${camera.id}/photos`, {
       range: true,
       start_date: dates.value[0],
       end_date: dates.value[1],
     });
-    photos.value = data;
+    photos.value = dbPhotos;
   } catch (error) {
     console.error(error);
     message.error("Something went wrong");

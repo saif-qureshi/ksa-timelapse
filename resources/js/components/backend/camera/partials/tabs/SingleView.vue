@@ -12,12 +12,21 @@
           Full Screen
         </a-button>
         <div class="" ref="imageRef">
-          <img :src="selectedPhoto.path" />
+          <a-empty
+            v-if="!selectedPhoto.path"
+            description="No image available"
+          />
+          <img v-else :src="selectedPhoto.path" class="w-full" />
         </div>
 
         <div v-if="showFullScreen" class="full-screen-overlay">
           <div class="full-screen-container">
+            <a-empty
+              v-if="!selectedPhoto.path"
+              description="No image available"
+            />
             <img
+              v-else
               :src="selectedPhoto.path"
               alt="Full Screen Image"
               @click="showFullScreen = !showFullScreen"
@@ -26,15 +35,18 @@
         </div>
       </div>
       <div v-if="mode === 'spot-zoom'">
+        <a-empty v-if="!selectedPhoto.path" description="No image available" />
         <VueMagnifier
+          v-else
           :src="selectedPhoto.path"
           :mgWidth="300"
           :mgHeight="300"
         />
       </div>
       <div v-if="mode === 'zoom'">
-        <Panzoom>
-          <img :src="selectedPhoto.path" alt="Image" />
+        <a-empty v-if="!selectedPhoto.path" description="No image available" />
+        <Panzoom v-else>
+          <img :src="selectedPhoto.path" alt="Image" class="w-full" />
         </Panzoom>
       </div>
     </div>

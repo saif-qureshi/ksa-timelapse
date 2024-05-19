@@ -198,13 +198,13 @@
                                                             class="h-4 w-4 text-blue-500"></i>
                                                         Copy
                                                     </button>
-                                                    <button data-camera-id="{{ $value['id'] }}"
+                                                    {{-- <button data-camera-id="{{ $value['id'] }}"
                                                         title="Refresh api token for this camera"
                                                         class="regenerate-access_token cursor-pointer flex items-center p-2 gap-x-1 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dropdown-item">
                                                         <i data-lucide="refresh-ccw"
                                                             class="h-4 w-4 text-green-500"></i>
                                                         Regenerate
-                                                    </button>
+                                                    </button> --}}
                                                 </div>
                                             </div>
                                         </div>

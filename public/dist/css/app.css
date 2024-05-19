@@ -10905,8 +10905,8 @@ html body {
   width: auto;
 }
 .logo__image {
-  height: 45px !important;
-  width: 70px !important;
+  height: 50px !important;
+  width: 250px !important;
   border-radius: 5px !important;
   object-fit: cover !important;
   object-position: left !important;

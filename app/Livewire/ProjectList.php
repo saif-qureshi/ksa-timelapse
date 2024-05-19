@@ -33,6 +33,11 @@ class ProjectList extends Component implements CrudListContract
                 'cb' => fn ($project) => view('livewire.partials.project-name-column', compact('project'))
             ],
             [
+                'name'        => 'Developer',
+                'html'        => true,
+                'cb'          => fn ($developer) => $developer->developer->name,
+            ],
+            [
                 'name'        => 'Created At',
                 'html'        => true,
                 'cb'          => fn ($developer) => $developer->created_at->format('M d, Y, g:i A')
@@ -102,6 +107,6 @@ class ProjectList extends Component implements CrudListContract
 
     public function getExtraQuery($query): ?Builder
     {
-        return $query;
+        return $query->with('developer');
     }
 }

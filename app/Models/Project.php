@@ -6,6 +6,7 @@ use App\Traits\FileHelper;
 use App\Traits\HasApiWhere;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Project extends Model
@@ -17,5 +18,10 @@ class Project extends Model
     public function cameras(): HasMany
     {
         return $this->hasMany(Camera::class);
+    }
+
+    public function developer(): BelongsTo
+    {
+        return $this->belongsTo(Developer::class);
     }
 }

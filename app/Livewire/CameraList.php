@@ -33,6 +33,11 @@ class CameraList extends Component implements CrudListContract
                 'sort' => true,
             ],
             [
+                'name' => 'Project',
+                'html' => true,
+                'cb' => fn($camera) => $camera->project->name,
+            ],
+            [
                 'name' => 'Token',
                 'html' => true,
                 'cb' => fn($camera) => Str::mask($camera->access_token,'*',5, 40)
@@ -109,7 +114,7 @@ class CameraList extends Component implements CrudListContract
 
     public function getExtraQuery($query): ?Builder
     {
-        return $query;
+        return $query->with('project');
     }
 
     public function render()

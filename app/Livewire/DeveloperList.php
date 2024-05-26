@@ -102,6 +102,6 @@ class DeveloperList extends Component implements CrudListContract
 
     public function getExtraQuery($query): ?Builder
     {
-        return $query;
+        return $query->FilterByRole(auth()->user());
     }
 }

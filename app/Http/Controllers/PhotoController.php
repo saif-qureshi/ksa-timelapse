@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Camera;
 use App\Models\Photo;
+use App\Traits\FileHelper;
 use Illuminate\Http\Request;
 
 class PhotoController extends Controller
 {
+    use FileHelper;
+
     public function index(Request $request, Camera $camera)
     {
         $photos = $camera->photos()
@@ -32,6 +35,15 @@ class PhotoController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    public function delete(Camera $camera, Photo $photo)
+    {
+        $this->deleteFile($photo->image);
+
+        $photo->delete();
+
+        return response()->json('Photo deleted successfully', 200);
     }
 
     public function getDatesWithoutData(Camera $camera)

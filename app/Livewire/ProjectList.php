@@ -107,6 +107,6 @@ class ProjectList extends Component implements CrudListContract
 
     public function getExtraQuery($query): ?Builder
     {
-        return $query->with('developer');
+        return $query->with('developer')->FilterByRole(auth()->user());
     }
 }

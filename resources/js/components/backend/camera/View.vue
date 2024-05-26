@@ -9,7 +9,12 @@
               <span>{{ tab.label }}</span>
             </div>
           </template>
-          <component :is="tab.children" :camera="camera" v-bind="tab.props" />
+          <component
+            :is="tab.children"
+            :camera="camera"
+            v-bind="tab.props"
+            :user="user"
+          />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -27,8 +32,9 @@ import Compare from "./partials/tabs/Compare.vue";
 import VideosList from "./partials/tabs/VideosList.vue";
 import VideoGenerate from "./partials/tabs/VideoGenerate.vue";
 
-const { camera } = defineProps({
+const { camera, user } = defineProps({
   camera: Object,
+  user: Object,
 });
 
 const tabs = [

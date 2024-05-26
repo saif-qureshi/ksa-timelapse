@@ -114,7 +114,7 @@ class CameraList extends Component implements CrudListContract
 
     public function getExtraQuery($query): ?Builder
     {
-        return $query->with('project');
+        return $query->with('project')->FilterByRole(auth()->user());
     }
 
     public function render()

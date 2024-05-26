@@ -27,13 +27,15 @@ class VideoController extends Controller
 
     public function store(Camera $camera, Request $request)
     {
+        abort_if(!auth()->user()->can_create_user, 403, 'Access denied');
+
         $request->validate([
             'start_date' => 'required|date_format:Y-m-d',
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
         ]);
 
-        $startDate = $request->date('start_date');
-        $endDate = $request->date('end_date');
+        $startDate = $request->date('start_date')->hour(8)->minute(0)->second(0);
+        $endDate = $request->date('end_date')->hour(5)->minute(0)->second(0);
 
         if ($endDate->diffInMonths($startDate) > 4) {
             throw ValidationException::withMessages([
@@ -44,6 +46,7 @@ class VideoController extends Controller
         $photos = $camera->photos()
             ->select('image')
             ->whereBetween('created_at', [$request->start_date, $request->end_date])
+            ->whe
             ->latest()
             ->get()
             ->toArray();

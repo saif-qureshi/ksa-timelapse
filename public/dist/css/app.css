@@ -7099,7 +7099,6 @@ html body {
         transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
         border-radius: 100%;
         --tw-bg-opacity: 1;
-        background: url('../images/login-cover.jpg') center top / cover;
         z-index: 9;
     }
 .dark .login:after {

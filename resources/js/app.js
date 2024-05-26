@@ -13,6 +13,7 @@ import EditUser from "./components/backend/user/Edit.vue";
 import AddCamera from "./components/backend/camera/Add.vue"
 import EditCamera from "./components/backend/camera/Edit.vue"
 import ViewCamera from "./components/backend/camera/View.vue"
+import Settings from "./components/backend/Settings.vue";
 
 const app = createApp({});
 
@@ -32,5 +33,7 @@ app.component("edit-user", EditUser);
 app.component("add-camera", AddCamera);
 app.component("edit-camera", EditCamera);
 app.component("view-camera", ViewCamera);
+
+app.component("settings", Settings);
 
 app.use(Antd).mount("#backend-app");

@@ -35,7 +35,7 @@ class VideoController extends Controller
         ]);
 
         $startDate = $request->date('start_date')->hour(8)->minute(0)->second(0);
-        $endDate = $request->date('end_date')->hour(5)->minute(0)->second(0);
+        $endDate = $request->date('end_date')->hour(16)->minute(0)->second(0);
 
         if ($endDate->diffInMonths($startDate) > 4) {
             throw ValidationException::withMessages([

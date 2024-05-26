@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\{
     CommentController,
     DashboardController,
+    SettingController,
     VideoController
 };
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'camera/{camera}'], function () {
         Route::get('/refresh-token', [CameraController::class, 'refreshToken'])->name('camera.refresh-token');
         Route::post('/photos', [PhotoController::class, 'index'])->name('photos');
+        Route::delete('/photos/{photo}', [PhotoController::class, 'delete'])->name('photos.delete');
         Route::resource('videos', VideoController::class)->only(['index', 'store', 'destroy']);
     });
 
@@ -45,4 +47,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/delete', [FileUploadController::class, 'removeGallery'])->name('gallery.remove');
         Route::post('/download', [FileUploadController::class, 'downloadImage']);
     });
+
+    Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
+    Route::post('settings', [SettingController::class, 'store'])->name('settings.store');
 });

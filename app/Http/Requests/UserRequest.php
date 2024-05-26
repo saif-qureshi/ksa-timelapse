@@ -18,7 +18,7 @@ class UserRequest extends FormRequest
     {
         $user = auth()->user();
 
-        return $user->role === 'admin' || $user->can_create_users;
+        return in_array($user->role, ['super_admin', 'admin']) || $user->can_create_users;
     }
 
     /**

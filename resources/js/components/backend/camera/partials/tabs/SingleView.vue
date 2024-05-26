@@ -51,19 +51,37 @@
       </div>
     </div>
     <div class="mt-5">
-      <div>
-        <label class="block mb-3">Photos Date: </label>
-        <a-date-picker
-          v-model:value="selectedDate"
-          class="w-56"
-          :disabled-date="getDisableDates"
-        />
-        <ImageSlider
-          :photos="photos"
-          :selected="selectedPhoto.id"
-          @onSelect="handleImageSelect"
-        />
+      <div class="flex justify-between items-center">
+        <div>
+          <label class="block mb-3">Photos Date: </label>
+          <a-date-picker
+            v-model:value="selectedDate"
+            class="w-56"
+            :disabled-date="getDisableDates"
+          />
+        </div>
+        <a-popconfirm
+          v-if="
+            ['super_admin', 'admin', 'project_admin'].includes(user.role) &&
+            mode === 'single' &&
+            selectedPhoto.path
+          "
+          title="Are you sure to delete this photo?"
+          @confirm="handleImageDelete"
+        >
+          <a-button
+            class="bg-red-500 hover:bg-red-600 text-white"
+            type="danger"
+          >
+            Delete This Photo
+          </a-button>
+        </a-popconfirm>
       </div>
+      <ImageSlider
+        :photos="photos"
+        :selected="selectedPhoto.id"
+        @onSelect="handleImageSelect"
+      />
     </div>
     <Feedback :selectedPhoto="selectedPhoto" />
   </div>
@@ -80,8 +98,9 @@ import Icon from "../../../../Icon.vue";
 import Feedback from "../Feedback.vue";
 import Panzoom from "../../../../Panzoom.vue";
 
-const { camera, mode } = defineProps({
+const { camera, mode, user } = defineProps({
   camera: Object,
+  user: Object,
   mode: {
     type: String,
     default: null,
@@ -123,6 +142,11 @@ const toggleFullScreen = () => {
       imageElement.msRequestFullscreen();
     }
   }
+};
+
+const handleImageDelete = async () => {
+  await axios.delete(`/camera/${camera.id}/photos/${selectedPhoto.value.id}`);
+  await getPhotos();
 };
 
 const getDisableDates = (current) => {

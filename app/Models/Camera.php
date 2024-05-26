@@ -66,4 +66,13 @@ class Camera extends Model
     {
         return $this->belongsTo(Project::class);
     }
+
+    public function scopeFilterByRole($query, $user)
+    {
+        return $query->when(in_array($user->role, ['project_admin']), function ($query) use ($user) {
+            return $query->whereHas('project.users', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            });
+        });
+    }
 }

@@ -17,6 +17,7 @@ class Sidebar extends Component
                 'icon'      => 'home',
                 'link'      => route('dashboard'),
                 'condition' => 'dashboard',
+                'visible'    => true,
                 'child'     => [],
             ],
             [
@@ -24,20 +25,15 @@ class Sidebar extends Component
                 'icon'      => 'tv-2',
                 'link'      => route('home.developers'),
                 'condition' => 'home',
+                'visible'    => true,
                 'child'     => [],
             ],
-            // [
-            //     'name'      => 'Downloads',
-            //     'icon'      => 'download',
-            //     'link'      => '#',
-            //     'condition' => 'dashboard',
-            //     'child'     => [],
-            // ],
             [
                 'name'      => 'Users',
                 'icon'      => 'users',
                 'link'      => route('user.index'),
                 'condition' => 'dashboard',
+                'visible'    => in_array(auth()->user()->role, ['admin', 'super_admin']),
                 'child'     => [],
             ],
             [
@@ -45,12 +41,14 @@ class Sidebar extends Component
                 'icon'      => 'hard-hat',
                 'link'      => route('developer.index'),
                 'condition' => 'dashboard',
+                'visible'    => in_array(auth()->user()->role, ['admin', 'super_admin', 'project_admin']),
                 'child'     => [],
             ],
             [
                 'name'      => 'Projects',
                 'icon'      => 'building-2',
                 'link'      => route('project.index'),
+                'visible'    => in_array(auth()->user()->role, ['admin', 'super_admin', 'project_admin']),
                 'condition' => 'dashboard',
                 'child'     => [],
             ],
@@ -59,6 +57,7 @@ class Sidebar extends Component
                 'icon'      => 'cctv',
                 'link'      => route('camera.index'),
                 'condition' => 'dashboard',
+                'visible'    => in_array(auth()->user()->role, ['admin', 'super_admin', 'project_admin']),
                 'child'     => [],
             ],
             [
@@ -66,8 +65,17 @@ class Sidebar extends Component
                 'icon'      => 'message-square-text',
                 'link'      => route('comments.index'),
                 'condition' => 'dashboard',
+                'visible'    => in_array(auth()->user()->role, ['admin', 'super_admin','project_admin']),
                 'child'     => [],
-            ]
+            ],
+            [
+                'name'      => 'Settings',
+                'icon'      => 'settings',
+                'link'      => route('settings.index'),
+                'condition' => 'dashboard',
+                'visible' => auth()->user()->role === 'super_admin',
+                'child'     => [],
+            ],
         ])->filter();
     }
 

@@ -8,6 +8,12 @@
     <meta name="author" content="LEFT4CODE">
     <title>{{ config('app.name', 'Timelapse Masterworks') }} | @yield('title')</title>
     <link rel="stylesheet" href="{{ asset('dist/css/app.css') }}" />
+    <style>
+        .login::after {
+            background: url('{{ asset('storage/' . settings('login_bg_image')) }}') center top / cover;
+
+        }
+    </style>
 </head>
 
 <body class="login">
@@ -19,13 +25,13 @@
                 <h3 style="z-index: 999; font-size: 18px;font-weight: 600">Others
                     promise. We deliver</h3>
             </div>
-            <div class="h-screen xl:h-auto flex py-5 xl:py-0 my-10 xl:my-0">
+            <div class="h-screen xl:h-auto flex py-5 xl:py-0">
                 @yield('content')
             </div>
         </div>
     </div>
-    <div class="absolute right-0 bottom-0 w-full"
-        style="height: 100px; background-color:#2b2b2b;display:flex; align-items:center">
+    <div class="hidden md:flex absolute right-0 bottom-0 w-full"
+        style="height: 100px; background-color:#2b2b2b; align-items:center">
         <img alt="illustration" class="mx-auto h-auto" width="400px" src="{{ asset('dist/images/logo.jpg') }}"
             style="transform: translateX(75px)">
     </div>

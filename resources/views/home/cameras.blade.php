@@ -1,4 +1,4 @@
-<x-admin.layout title="My Project">
+<x-admin.layout title="Cameras">
     <x-admin.styles>
         <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.css" />
@@ -40,6 +40,10 @@
         </a>
         <div class="bg-white p-5 rounded-md mt-5">
             <div class="grid grid-cols-12 gap-5">
+                @if ($cameras->count() <= 0)
+                    No Camera found
+                @else
+
                 @foreach ($cameras as $camera)
                     <div
                         class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
@@ -51,8 +55,10 @@
                             <ul class="slider">
                                 @forelse ($camera->photos as $photo)
                                     <li>
-                                        <img src="{{ $photo->getImagePath('image') }}" alt="{{ $photo->image }}"
-                                            class="w-full h-56 object-cover">
+                                        <a href="{{ route('camera.show', $camera) }}">
+                                            <img src="{{ $photo->getImagePath('image') }}" alt="{{ $photo->image }}"
+                                                class="w-full h-56 object-cover">
+                                        </a>
                                     </li>
                                 @empty
                                     <li>
@@ -74,6 +80,8 @@
                 @endforeach
 
                 {{ $cameras->links() }}
+                    
+                @endif
             </div>
         </div>
     </div>

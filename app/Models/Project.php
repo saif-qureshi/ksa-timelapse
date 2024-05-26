@@ -37,6 +37,8 @@ class Project extends Model
             return $query->whereHas('users', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             });
+        })->when(in_array($user->role, ['super_admin', 'admin']), function ($query) {
+            return $query;
         });
     }
 }

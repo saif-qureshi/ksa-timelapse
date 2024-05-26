@@ -12,13 +12,13 @@ class Camera extends Model
 {
     use HasFactory, HasApiWhere, FileHelper;
 
-    public static function boot() {
+    public static function boot()
+    {
         parent::boot();
-    
-        static::creating(function (Camera $item) {
-            $item->access_token = (new self)->getAccessToken(); 
-        });
 
+        static::creating(function (Camera $item) {
+            $item->access_token = (new self)->getAccessToken();
+        });
     }
 
     protected $fillable = [
@@ -73,6 +73,8 @@ class Camera extends Model
             return $query->whereHas('project.users', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             });
+        })->when(in_array($user->role, ['super_admin', 'admin']), function ($query) {
+            return $query;
         });
     }
 }

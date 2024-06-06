@@ -3,105 +3,70 @@
 namespace App\Livewire;
 
 use App\Models\Developer;
-use App\Contracts\CrudListContract;
-use App\Traits\CrudListHelper;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
-use Livewire\WithPagination;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 
-class DeveloperList extends Component implements CrudListContract
+class DeveloperList extends Component implements HasForms, HasTable
 {
-    use WithPagination, CrudListHelper;
-
-    public string $model = Developer::class;
-    public $sortField = 'id';
-    public ?string $createUrl = "developer.create";
-    protected string $paginationTheme = 'tailwind';
+    use InteractsWithTable;
+    use InteractsWithForms;
 
 
-    public function buildFilters(): array
+    public string $icon = 'hard-hat';
+    public string $createUrl = "developer.create";
+
+    public function table(Table $table): Table
     {
-        return [];
+        return $table
+            ->query(Developer::query()->filterByRole(auth()->user()))
+            ->columns([
+                ImageColumn::make('logo')
+                    ->label('Logo')
+                    ->circular(),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('projects_count')->counts('projects')->label('Total Projects'),
+                TextColumn::make('description'),
+                TextColumn::make('created_at')->since(),
+                IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean(),
+            ])
+            ->actions([
+                ActionGroup::make([
+                    Action::make('edit')
+                        ->icon('heroicon-s-pencil')
+                        ->url(fn (Developer $record): string => route('developer.edit', $record)),
+                    DeleteAction::make('delete'),
+                ])->size('sm'),
+            ])
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Create developer')
+                    ->url(route($this->createUrl))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
+            ]);
     }
 
-    public function buildTable(): array
+    public function delete(Developer $record)
     {
-        return [
-            [
-                'name' => 'Name',
-                'html' => true,
-                'cb' => fn ($developer) => view('livewire.partials.developer-name-column', compact('developer'))
-            ],
-            [
-                'name'        => 'Created At',
-                'html'        => true,
-                'cb'          => fn ($developer) => $developer->created_at->format('M d, Y, g:i A')
-            ],
-            [
-                'name'        => 'Active',
-                'checkActive' => 'is_active',
-            ],
-            [
-                'name'    => 'Action',
-                'actions' => [
-                    [
-                        'name'  => 'Edit',
-                        'icon'  => 'tick',
-                        'route' => function ($developer) {
-                            return route('developer.edit', $developer->id);
-                        }
-                    ],
-                    [
-                        'name'  => 'Delete',
-                        'class' => 'deleteBtn text-danger',
-                        'icon'  => 'dustbin',
-                        'route' => function ($developer) {
-                            return route('developer.destroy', $developer->id);
-                        }
-                    ]
-                ]
-            ]
-        ];
+        $record->delete();
     }
 
-    public function getTableName(): string
+    public function render()
     {
-        return 'Developer';
-    }
-
-
-    public function getWith(): ?string
-    {
-        return "";
-    }
-
-    public function getSearchOptions(): array
-    {
-        return [
-            'enabled'      => true,
-            'placeholder'  => 'Search by Name or tag',
-            'searchFields' => [
-                'name',
-                'tag'
-            ]
-        ];
-    }
-
-    public function hasPagination(): bool
-    {
-        return true;
-    }
-
-    public function getPerPageOptions(): array
-    {
-        return [
-            'enabled' => true,
-            'perPage' => 10,
-        ];
-    }
-
-    public function getExtraQuery($query): ?Builder
-    {
-        return $query->FilterByRole(auth()->user());
+        return view('livewire.pages.datatable');
     }
 }

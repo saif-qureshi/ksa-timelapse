@@ -2,128 +2,81 @@
 
 namespace App\Livewire;
 
-use App\Contracts\CrudListContract;
 use App\Models\Camera;
-use App\Traits\CrudListHelper;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\User;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 
-class CameraList extends Component implements CrudListContract
+class CameraList extends Component implements HasForms, HasTable
 {
-    use WithPagination, CrudListHelper;
+    use InteractsWithTable;
+    use InteractsWithForms;
 
-    public string $model = Camera::class;
-    public $sortField = 'id';
-    public ?string $createUrl = "camera.create";
-    protected string $paginationTheme = 'tailwind';
+    public string $icon = 'cctv';
+    public string $createUrl = "camera.create";
 
-    public function buildFilters(): array
+    public function table(Table $table): Table
     {
-        return [];
+        return $table
+            ->query(Camera::query()->filterByRole(auth()->user()))
+            ->columns([
+                TextColumn::make('name')
+                    ->label('Name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('project.name')->searchable()->label('Project')->badge(),
+                TextColumn::make('developer.name')->searchable()->label('Developer')->badge(),
+                TextColumn::make('access_token')
+                    ->copyable()
+                    ->copyMessage('Access token copied')
+                    ->label('Access Token')
+                    ->formatStateUsing(fn (Camera $record) => Str::mask($record->access_token, '*', 6, 40,)),
+                TextColumn::make('latitude'),
+                TextColumn::make('longitude'),
+                IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean()
+            ])
+            ->actions([
+                ActionGroup::make([
+                    Action::make('edit')
+                        ->icon('heroicon-s-pencil')
+                        ->url(fn (Camera $record): string => route('camera.edit', $record)),
+                    DeleteAction::make('delete'),
+                    Action::make('refresh')
+                        ->label('Refresh Token')
+                        ->icon('heroicon-s-arrow-path')
+                        ->requiresConfirmation()
+                        ->action(fn (Camera $record) => $record->refreshAccessToken()),
+
+                ])->size('sm'),
+            ])
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Create camera')
+                    ->url(route('camera.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
+            ]);
     }
 
-    public function buildTable(): array
+    public function delete(Camera $record)
     {
-        return [
-            [
-                'name' => 'Name',
-                'key' => 'name',
-                'sort' => true,
-            ],
-            [
-                'name' => 'Project',
-                'html' => true,
-                'cb' => fn($camera) => $camera->project->name,
-            ],
-            [
-                'name' => 'Token',
-                'html' => true,
-                'cb' => fn($camera) => Str::mask($camera->access_token,'*',5, 40)
-            ],
-            [
-                'name' => 'Longitude',
-                'key'   => 'longitude'
-            ],
-            [
-                'name' => 'Latitude',
-                'key'   => 'latitude'
-            ],
-            [
-                'name'        => 'Active',
-                'checkActive' => 'is_active',
-            ],
-            [
-                'name'    => 'Action',
-                'actions' => [
-                    [
-                        'name'  => 'Edit',
-                        'icon'  => 'tick',
-                        'route' => function ($camera) {
-                            return route('camera.edit', $camera->id);
-                        }
-                    ],
-                    [
-                        'name'  => 'Delete',
-                        'class' => 'deleteBtn text-danger',
-                        'icon'  => 'dustbin',
-                        'route' => function ($camera) {
-                            return route('camera.destroy', $camera->id);
-                        }
-                    ]
-                ]
-            ]
-        ];
-    }
-
-    public function getTableName(): string
-    {
-        return 'Cameras';
-    }
-
-
-    public function getWith(): ?string
-    {
-        return "";
-    }
-
-    public function getSearchOptions(): array
-    {
-        return [
-            'enabled'      => true,
-            'placeholder'  => 'Search by Name',
-            'searchFields' => [
-                'name',
-            ]
-        ];
-    }
-
-    public function hasPagination(): bool
-    {
-        return true;
-    }
-
-    public function getPerPageOptions(): array
-    {
-        return [
-            'enabled' => true,
-            'perPage' => 10,
-        ];
-    }
-
-    public function getExtraQuery($query): ?Builder
-    {
-        return $query->with('project')->FilterByRole(auth()->user());
+        $record->delete();
     }
 
     public function render()
     {
-        return view('livewire.pages.camera-listing')
-            ->with([
-                'data'    => $this->filter(),
-                'table'   => $this->buildTable(),
-                'filters' => $this->buildFiltersWithProperties()
-            ]);
+        return view('livewire.pages.datatable');
     }
 }

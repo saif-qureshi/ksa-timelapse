@@ -2,126 +2,73 @@
 
 namespace App\Livewire;
 
-use App\Contracts\CrudListContract;
 use App\Models\User;
-use App\Traits\CrudListHelper;
-use Illuminate\Database\Eloquent\Builder;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Illuminate\Support\Str;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 
-class UserList extends Component implements CrudListContract
+class UserList extends Component implements HasForms, HasTable
 {
-    use WithPagination, CrudListHelper;
+    use InteractsWithTable;
+    use InteractsWithForms;
 
-    public string $model = User::class;
-    public $sortField = 'id';
-    public ?string $createUrl = "user.create";
-    protected string $paginationTheme = 'tailwind';
+    public string $icon = 'users'; 
+    public string $createUrl = "user.create";
 
-
-    public function buildFilters(): array
+    public function table(Table $table): Table
     {
-        return [];
+        return $table
+            ->query(User::query()->where('role', '!=', 'super_admin'))
+            ->columns([
+                TextColumn::make('first_name')
+                    ->label('Name')
+                    ->formatStateUsing(fn (User $record) => $record->full_name)
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->searchable(),
+                TextColumn::make('role')
+                    ->formatStateUsing(fn (User $record) => Str::of($record->role)->replace('_', ' ')->ucfirst()),
+                TextColumn::make('last_login_at')
+                    ->since(),
+                TextColumn::make('created_at')->since(),
+                IconColumn::make('is_active')
+                    ->label('Active')
+                    ->boolean()
+            ])
+            ->actions([
+                ActionGroup::make([
+                    Action::make('edit')
+                        ->icon('heroicon-s-pencil')
+                        ->url(fn (User $record): string => route('user.edit', $record)),
+                    DeleteAction::make('delete'),
+                ])->size('sm'),
+            ])
+            ->emptyStateActions([
+                Action::make('create')
+                    ->label('Create User')
+                    ->url(route('user.create'))
+                    ->icon('heroicon-m-plus')
+                    ->button(),
+            ]);
     }
 
-    public function buildTable(): array
+    public function delete(User $record)
     {
-        return [
-            [
-                'name' => 'Name',
-                'html' => true,
-                'sort' => true,
-                'cb' => fn ($user) => $user->full_name
-            ],
-            [
-                'name' => 'Email',
-                'key'   => 'email'
-            ],
-            [
-                'name' => 'Role',
-                'html' => true,
-                'cb' => fn ($user) => Str::of($user->role)->replace('_', ' ')->ucfirst()->value
-            ],
-            [
-                'name'        => 'Last login',
-                'sort'        => true,
-                'html'        => true,
-                'cb'          => fn ($user) => $user->last_login_at?->format('M d, Y, g:i A') ?? '--'
-            ],
-            [
-                'name'        => 'Created At',
-                'html'        => true,
-                'sort'        => true,
-                'cb'          => fn ($user) => $user->created_at->format('M d, Y, g:i A')
-            ],
-            [
-                'name'        => 'Active',
-                'checkActive' => 'is_active',
-            ],
-            [
-                'name'    => 'Action',
-                'actions' => [
-                    [
-                        'name'  => 'Edit',
-                        'icon'  => 'tick',
-                        'route' => function ($user) {
-                            return route('user.edit', $user->id);
-                        }
-                    ],
-                    [
-                        'name'  => 'Delete',
-                        'class' => 'deleteBtn text-danger',
-                        'icon'  => 'dustbin',
-                        'route' => function ($user) {
-                            return route('user.destroy', $user->id);
-                        }
-                    ]
-                ]
-            ]
-        ];
+        $record->delete();
     }
 
-    public function getTableName(): string
+    public function render()
     {
-        return 'Users';
-    }
-
-
-    public function getWith(): ?string
-    {
-        return "";
-    }
-
-    public function getSearchOptions(): array
-    {
-        return [
-            'enabled'      => true,
-            'placeholder'  => 'Search by Name or email',
-            'searchFields' => [
-                'first_name',
-                'last_name',
-                'email',
-                'role'
-            ]
-        ];
-    }
-
-    public function hasPagination(): bool
-    {
-        return true;
-    }
-
-    public function getPerPageOptions(): array
-    {
-        return [
-            'enabled' => true,
-            'perPage' => 10,
-        ];
-    }
-
-    public function getExtraQuery($query): ?Builder
-    {
-        return $query;
+        return view('livewire.pages.datatable');
     }
 }

@@ -45,7 +45,7 @@
                 @else
 
                 @foreach ($cameras as $camera)
-                    <div
+                <a href="{{ route('camera.show', $camera) }}"
                         class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
                         <div class="grdient-color header flex items-center bg-slate-100 px-4 py-3 rounded-md">
                             <i data-lucide="cctv" class="mr-2"></i>
@@ -54,11 +54,9 @@
                         <div class="card-body min-h-40">
                             <ul class="slider">
                                 @forelse ($camera->photos as $photo)
-                                    <li>
-                                        <a href="{{ route('camera.show', $camera) }}">
+                                <li>
                                             <img src="{{ $photo->getImagePath('image') }}" alt="{{ $photo->image }}"
                                                 class="w-full h-56 object-cover">
-                                        </a>
                                     </li>
                                 @empty
                                     <li>
@@ -69,14 +67,13 @@
                             </ul>
                         </div>
 
-                        <a href="{{ route('camera.show', $camera) }}"
-                            class="grdient-color2 p-3 inline-block text-base text-left  w-full">
+                        <div class="grdient-color2 p-3 inline-block text-base text-left  w-full">
                             <p class="text-sm txt-white text-white mb-1">Started:
-                                {{ $camera->created_at->format('d-M-Y h:i A') }} (Arabian Standard Time)</p>
+                                {{ $camera->created_at->format('d-M-Y h:i A') }}</p>
                             <p class="text-sm txt-white text-white">Last Update:
-                                {{ $camera->updated_at->format('d-M-Y h:i A') }} (Arabian Standard Time)</p>
-                        </a>
-                    </div>
+                                {{ $camera->photos->first()->created_at->format('d-M-Y h:i A') }}</p>
+                        </div>
+                    </a>
                 @endforeach
 
                 {{ $cameras->links() }}

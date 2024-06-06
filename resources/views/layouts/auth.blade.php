@@ -22,7 +22,7 @@
             <div class="hidden xl:flex flex-col min-h-screen text-white" style="max-width: 450px">
                 <h2 style="z-index: 999;font-size: 28px;margin-top: 2rem; font-weight: 600;">Timelapse
                     Masterworks</h2>
-                <h3 style="z-index: 999; font-size: 18px;font-weight: 600">Others
+                <h3 style="z-index: 999; font-size: 18px;font-weight: 600; text-transform: uppercase">Others
                     promise. We deliver</h3>
             </div>
             <div class="h-screen xl:h-auto flex py-5 xl:py-0">

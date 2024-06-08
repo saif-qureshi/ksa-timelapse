@@ -37,7 +37,7 @@ class DeveloperList extends Component implements HasForms, HasTable
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('projects_count')->counts('projects')->label('Total Projects'),
-                TextColumn::make('description'),
+                TextColumn::make('description')->limit(50),
                 TextColumn::make('created_at')->since(),
                 IconColumn::make('is_active')
                     ->label('Active')

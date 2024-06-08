@@ -14,7 +14,7 @@
                             class="w-full h-56 object-cover">
                     </div>
                     <div class="card-body p-4">
-                        {{ $developer->description }}
+                        {{ Str::limit($developer->description, 300)}}
                     </div>
                 </a>
             @endforeach

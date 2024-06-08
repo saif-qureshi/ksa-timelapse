@@ -69,11 +69,11 @@ class Camera extends Model
 
     public function scopeFilterByRole($query, $user)
     {
-        return $query->when(in_array($user->role, ['project_admin']), function ($query) use ($user) {
+        return $query->when(in_array($user->role, ['admin', 'project_admin', 'customer']), function ($query) use ($user) {
             return $query->whereHas('project.users', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             });
-        })->when(in_array($user->role, ['super_admin', 'admin']), function ($query) {
+        })->when(in_array($user->role, ['super_admin']), function ($query) {
             return $query;
         });
     }

@@ -1,13 +1,14 @@
 <template>
   <div class="mt-5">
-    <div class="w-full">
+    <div class="w-full overflow-x-auto">
       <a-empty v-if="photos.length <= 0" description="No image available"/>
-      <ul class="grid gap-2 mb-0 overflow-x-auto grid-flow-col" v-if="photos.length > 0">
+      <ul class="flex gap-2 mb-0" v-if="photos.length > 0">
         <li
           v-for="photo in photos"
-          class="relative cursor-pointer w-56"
+          class="relative cursor-pointer"
           :class="{ 'border-4 border-blue-500': selected === photo.id }"
           :key="photo.image"
+          :style="{flex: '0 0 14rem'}"
           @click="() => selectPhoto(photo)"
         >
           <img :src="photo.path" :alt="photo.image" class="h-full w-full object-contain" />

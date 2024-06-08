@@ -29,6 +29,14 @@ class Sidebar extends Component
                 'child'     => [],
             ],
             [
+                'name'      => 'Downloads',
+                'icon'      => 'download',
+                'link'      => route('download'),
+                'condition' => 'download',
+                'visible'    => true,
+                'child'     => [],
+            ],
+            [
                 'name'      => 'Users',
                 'icon'      => 'users',
                 'link'      => route('user.index'),

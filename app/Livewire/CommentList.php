@@ -2,114 +2,55 @@
 
 namespace App\Livewire;
 
-use App\Contracts\CrudListContract;
-use Livewire\Component;
 use App\Models\Comment;
-use App\Traits\CrudListHelper;
-use Illuminate\Database\Eloquent\Builder;
-use Livewire\WithPagination;
+use Livewire\Component;
+use Illuminate\Support\Str;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Contracts\HasTable;
+use Filament\Tables\Table;
 
-class CommentList extends Component implements CrudListContract
+class CommentList extends Component implements HasForms, HasTable
 {
-    use WithPagination, CrudListHelper;
-    public string $model = Comment::class;
-    public $sortField = 'id';
-    protected string $paginationTheme = 'tailwind';
+    use InteractsWithTable;
+    use InteractsWithForms;
 
-    public function buildFilters(): array
+    public string $icon = 'message-square-text';
+
+    public function table(Table $table): Table
     {
-        return [];
+        return $table
+            ->query(Comment::query()->with('user', 'photo'))
+            ->columns([
+                TextColumn::make('user.full_name')
+                    ->label('Name')
+                    ->searchable()
+                    ->sortable(),
+                ImageColumn::make('photo.image'),
+                TextColumn::make('message')->searchable()->label('Comment'),
+                TextColumn::make('photo.camera.name')->searchable()->label('Camera')->badge(),
+                IconColumn::make('is_approved')
+                    ->label('Approved')
+                    ->boolean()
+            ])
+            ->actions([
+                Action::make('approve')
+                    ->visible(fn (Comment $record) => ! $record->is_approved)
+                    ->icon('heroicon-s-check')
+                    ->requiresConfirmation()
+                    ->action(fn (Comment $record) => $record->update(['is_approved' => true])),
+            ]);
     }
 
-    public function buildTable(): array
+    public function render()
     {
-        return [
-            [
-                'name' => 'User',
-                'html'        => true,
-                'cb'          => fn ($comment) => $comment->user->full_name
-            ],
-            [
-                'name' => 'Camera',
-                'html'   => true,
-                'cb'   => function ($comment) {
-                    return "
-                    {$comment->photo->camera->developer->name}</br>
-                    {$comment->photo->camera->project->name}</br>
-                    {$comment->photo->camera->name}</br>
-                    ";
-                }
-            ],
-            [
-                'name' => 'Comment',
-                'key' => 'message',
-            ],
-            [
-                'name' => 'Approved',
-                'checkActive' => 'is_approved',
-                'checkedYesLabel' => "Yes",
-                'checkedNoLabel' => "No",
-            ],
-            [
-                'name'    => 'Action',
-                'actions' => [
-                    [
-                        'name'  => 'Approve',
-                        'icon'  => 'tick',
-                        'route' => function ($comment) {
-                            return route('comments.approve', $comment->id);
-                        }
-                    ],
-                    // [
-                    //     'name'  => 'Delete',
-                    //     'class' => 'deleteBtn text-danger',
-                    //     'icon'  => 'dustbin',
-                    //     'route' => function ($comment) {
-                    //         return route('comments.destroy', $comment->id);
-                    //     }
-                    // ]
-                ]
-            ]
-        ];
-    }
-
-    public function getTableName(): string
-    {
-        return 'comments';
-    }
-
-
-    public function getWith(): string|array|null
-    {
-        return ['user', 'photo', 'photo.camera', 'photo.camera.developer', 'photo.camera.project'];
-    }
-
-    public function getSearchOptions(): array
-    {
-        return [
-            'enabled'      => true,
-            'placeholder'  => 'Search by message',
-            'searchFields' => [
-                'message',
-            ]
-        ];
-    }
-
-    public function hasPagination(): bool
-    {
-        return true;
-    }
-
-    public function getPerPageOptions(): array
-    {
-        return [
-            'enabled' => true,
-            'perPage' => 10,
-        ];
-    }
-
-    public function getExtraQuery($query): ?Builder
-    {
-        return $query;
+        return view('livewire.pages.datatable');
     }
 }

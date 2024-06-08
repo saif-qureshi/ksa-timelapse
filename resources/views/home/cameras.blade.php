@@ -43,41 +43,48 @@
                 @if ($cameras->count() <= 0)
                     No Camera found
                 @else
+                    @foreach ($cameras as $camera)
+                        <a href="{{ route('camera.show', $camera) }}"
+                            class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
+                            <div class="grdient-color header flex items-center bg-slate-100 px-4 py-3 rounded-md">
+                                <i data-lucide="cctv" class="mr-2"></i>
+                                <h3 class="mb-0">{{ $camera->name }}</h3>
+                            </div>
+                            <div class="card-body min-h-40">
+                                <ul class="slider">
+                                    @if (auth()->user()->is_active)
+                                        @forelse ($camera->photos as $photo)
+                                            <li>
+                                                <img src="{{ $photo->getImagePath('image') }}" alt="{{ $photo->image }}"
+                                                    class="w-full h-56 object-cover">
+                                            </li>
+                                        @empty
+                                            <li>
+                                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"
+                                                    alt="sadas" class="w-full h-56 object-cover">
+                                            </li>
+                                        @endforelse
+                                    @else
+                                        <li>
+                                            <img src="{{ asset('dist/images/service-disabled.jpg') }}"
+                                                alt="sadas" class="w-full h-56 object-cover">
+                                        </li>
+                                    @endif
+                                </ul>
+                            </div>
 
-                @foreach ($cameras as $camera)
-                <a href="{{ route('camera.show', $camera) }}"
-                        class="project-card col-span-12 md:col-span-4 bg-slate-50 rounded-md cursor-pointer hover:shadow-md transition-shadow">
-                        <div class="grdient-color header flex items-center bg-slate-100 px-4 py-3 rounded-md">
-                            <i data-lucide="cctv" class="mr-2"></i>
-                            <h3 class="mb-0">{{ $camera->name }}</h3>
-                        </div>
-                        <div class="card-body min-h-40">
-                            <ul class="slider">
-                                @forelse ($camera->photos as $photo)
-                                <li>
-                                            <img src="{{ $photo->getImagePath('image') }}" alt="{{ $photo->image }}"
-                                                class="w-full h-56 object-cover">
-                                    </li>
-                                @empty
-                                    <li>
-                                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/1024px-No_image_available.svg.png"
-                                            alt="sadas" class="w-full h-56 object-cover">
-                                    </li>
-                                @endforelse
-                            </ul>
-                        </div>
+                            <div class="grdient-color2 p-3 inline-block text-base text-left  w-full">
+                                <p class="text-sm txt-white text-white mb-1">Started:
+                                    {{ $camera->created_at->format('d-M-Y h:i A') }}</p>
+                                <p class="text-sm txt-white text-white">Last Update:
+                                    {{ $camera->photos->first()?->created_at->format('d-M-Y h:i A') ?? 'No update yet' }}
+                                </p>
+                            </div>
+                        </a>
+                    @endforeach
 
-                        <div class="grdient-color2 p-3 inline-block text-base text-left  w-full">
-                            <p class="text-sm txt-white text-white mb-1">Started:
-                                {{ $camera->created_at->format('d-M-Y h:i A') }}</p>
-                            <p class="text-sm txt-white text-white">Last Update:
-                                {{ $camera->photos->first()->created_at->format('d-M-Y h:i A') }}</p>
-                        </div>
-                    </a>
-                @endforeach
+                    {{ $cameras->links() }}
 
-                {{ $cameras->links() }}
-                    
                 @endif
             </div>
         </div>

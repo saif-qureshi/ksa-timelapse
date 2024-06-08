@@ -13,6 +13,7 @@ use App\Http\Controllers\{
     SettingController,
     VideoController
 };
+use App\Livewire\DownloadList;
 use Illuminate\Support\Facades\Route;
 
 
@@ -31,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('videos', VideoController::class)->only(['index', 'store', 'destroy']);
     });
 
+    Route::view('download','download.index')->name('download');
     Route::resource('camera', CameraController::class);
     Route::get('comments/{comment}/approve', [CommentController::class, 'approve'])->name('comments.approve');
     Route::resource('comments', CommentController::class);

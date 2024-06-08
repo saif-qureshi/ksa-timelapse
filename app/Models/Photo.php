@@ -14,7 +14,7 @@ class Photo extends Model
 
     protected $appends = ['path'];
 
-    protected $fillable = ['image'];
+    protected $fillable = ['image', 'created_at', 'updated_at'];
 
     protected function path(): Attribute
     {

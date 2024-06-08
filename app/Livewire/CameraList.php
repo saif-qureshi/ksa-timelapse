@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use App\Models\Camera;
-use App\Models\User;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Filament\Forms\Concerns\InteractsWithForms;

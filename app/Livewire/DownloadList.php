@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Video;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\Action;
@@ -43,9 +44,29 @@ class DownloadList extends Component implements HasForms, HasTable
             ->actions([
                 Action::make('download')
                     ->label('Download')
-                    ->action(fn (Video $record) => Storage::disk('public')->download($record->file))
+                    ->action(fn (Video $record) => $this->download($record))
                     ->button(),
             ]);
+    }
+
+    public function download(Video $record)
+    {
+        return response()->streamDownload(function () use ($record) {
+            $stream = Storage::disk('public')->readStream($record->file);
+            if ($stream === false) {
+                abort(404, 'File not found.');
+            }
+
+            // Define the chunk size (1MB in this case)
+            $chunkSize = 1024 * 1024;
+
+            while (!feof($stream)) {
+                echo fread($stream, $chunkSize);
+                flush(); // Flush the output buffer to the client
+            }
+
+            fclose($stream);
+        }, Str::replace('videos/', '', $record->file));
     }
 
     public function render()

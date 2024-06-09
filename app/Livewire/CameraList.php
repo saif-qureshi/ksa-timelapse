@@ -52,11 +52,11 @@ class CameraList extends Component implements HasForms, HasTable
                         ->icon('heroicon-s-pencil')
                         ->url(fn (Camera $record): string => route('camera.edit', $record)),
                     DeleteAction::make('delete'),
-                    Action::make('refresh')
-                        ->label('Refresh Token')
-                        ->icon('heroicon-s-arrow-path')
-                        ->requiresConfirmation()
-                        ->action(fn (Camera $record) => $record->refreshAccessToken()),
+                    // Action::make('refresh')
+                    //     ->label('Refresh Token')
+                    //     ->icon('heroicon-s-arrow-path')
+                    //     ->requiresConfirmation()
+                    //     ->action(fn (Camera $record) => $record->refreshAccessToken()),
 
                 ])->size('sm'),
             ])

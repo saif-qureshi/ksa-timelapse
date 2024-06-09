@@ -62,7 +62,7 @@
         </div>
         <a-popconfirm
           v-if="
-            ['super_admin', 'admin', 'project_admin'].includes(user.role) &&
+            ['super_admin', 'admin', 'project_admin'].includes(user?.role) &&
             mode === 'single' &&
             selectedPhoto.path
           "

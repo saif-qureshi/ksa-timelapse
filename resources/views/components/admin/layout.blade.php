@@ -16,7 +16,7 @@
         <div class="h-full flex items-center">
 
             <a href="" class="logo -intro-x hidden md:flex">
-                <img alt="{{ config('app.name') }}" class="logo__image" src="{{ asset('dist/images/logo.jpg') }}">
+                <img alt="{{ config('app.name') }}" class="logo__image" src="{{ asset('dist/images/logo.png') }}">
             </a>
 
             <x-admin.breadcrumbs title="{{ $title }}" />

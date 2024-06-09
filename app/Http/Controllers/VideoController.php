@@ -15,9 +15,13 @@ class VideoController extends Controller
 
     public function index(Camera $camera, Request $request)
     {
+        
+        $startDate = $request->date('start_date')->hour(8)->minute(0)->second(0);
+        $endDate = $request->date('end_date')->hour(16)->minute(0)->second(0);
+
         $videos = $camera->videos()
-            ->whereDate('start_date', '>=', $request->start_date)
-            ->orWhereDate('end_date', '<=', $request->end_date)
+            ->whereDate('start_date', '>=', $startDate)
+            ->orWhereDate('end_date', '<=', $endDate)
             ->where('status', 'completed')
             ->latest()
             ->get();
@@ -45,7 +49,7 @@ class VideoController extends Controller
 
         $photos = $camera->photos()
             ->select('image')
-            ->whereBetween('created_at', [$request->start_date, $request->end_date])
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->latest()
             ->get()
             ->toArray();

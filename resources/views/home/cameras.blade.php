@@ -77,7 +77,7 @@
                                 <p class="text-sm txt-white text-white mb-1">Started:
                                     {{ $camera->created_at->format('d-M-Y h:i A') }}</p>
                                 <p class="text-sm txt-white text-white">Last Update:
-                                    {{ $camera->photos->first()?->created_at->format('d-M-Y h:i A') ?? 'No update yet' }}
+                                    {{ $camera->lastActivity() }}
                                 </p>
                             </div>
                         </a>

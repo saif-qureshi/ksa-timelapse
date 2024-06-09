@@ -1,23 +1,16 @@
 <template>
-  <div>
-    <div class="mt-12 bg-white p-5 rounded-md">
-      <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top">
-        <a-tab-pane v-for="tab in tabs" :key="tab.key">
-          <template #tab>
-            <div class="flex items-center gap-1">
-              <Icon :name="tab.icon" :size="20" />
-              <span>{{ tab.label }}</span>
-            </div>
-          </template>
-          <component
-            :is="tab.children"
-            :camera="camera"
-            v-bind="tab.props"
-            :user="user"
-          />
-        </a-tab-pane>
-      </a-tabs>
-    </div>
+  <div class="mt-12 bg-white p-5 rounded-md" style="max-height: 75vh;overflow-y: scroll;">
+    <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top" class="sticky top-0 z-50">
+      <a-tab-pane v-for="tab in tabs" :key="tab.key">
+        <template #tab>
+          <div class="flex items-center gap-1">
+            <Icon :name="tab.icon" :size="20" />
+            <span>{{ tab.label }}</span>
+          </div>
+        </template>
+        <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" />
+      </a-tab-pane>
+    </a-tabs>
   </div>
 </template>
 
@@ -100,7 +93,7 @@ const tabs = [
   {
     key: 8,
     icon: "SearchCheck",
-    label: "Search",
+    label: "Custom Video",
     children: VideoGenerate,
     props: {},
   },
@@ -108,3 +101,13 @@ const tabs = [
 
 let activeKey = ref(1);
 </script>
+
+<style>
+#backend-app .ant-tabs-nav {
+  position: sticky;
+  top: -20px;
+  z-index: 999;
+  background: #fff;
+  padding: 10px 0;
+}
+</style>

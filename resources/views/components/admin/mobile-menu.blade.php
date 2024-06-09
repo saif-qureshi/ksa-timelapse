@@ -1,7 +1,7 @@
 <div class="mobile-menu md:hidden">
     <div class="mobile-menu-bar">
         <a href="" class="flex mr-auto">
-            <img class="w-full h-14 object-cover object-left rounded-md" src="{{ asset('dist/images/logo.jpg') }}">
+            <img class="w-full h-14 object-cover object-left rounded-md" src="{{ asset('dist/images/logo.png') }}">
         </a>
         <a href="javascript:;" id="mobile-menu-toggler"> <i data-lucide="bar-chart-2"
                 class="w-8 h-8 text-white transform -rotate-90"></i> </a>

@@ -16,12 +16,12 @@ class PhotoController extends Controller
         $photos = $camera->photos()
             ->when($request->has('range') && $request->range, function ($query) use ($request) {
                 return $query->whereBetween('created_at', [
-                    $request->has('start_date') ? $request->date('start_date') : now()->startOf('month'),
-                    $request->has('end_date') ? $request->date('end_date') : now()->endOf('month'),
+                    $request->has('start_date') ? $request->date('start_date')->startOfDay() : now()->startOf('month'),
+                    $request->has('end_date') ? $request->date('end_date')->endOfDay() : now()->endOf('month'),
                 ]);
             })
             ->when(!$request->has('range'), function ($query) use ($request) {
-                return $query->whereDate('created_at', $request->date ?? now()->format('Y-m-d'));
+                return $query->whereDate('created_at', $request->date('date')->startOfDay() ?? now()->startOfDay()->format('Y-m-d'));
             })
             ->latest()
             ->get();

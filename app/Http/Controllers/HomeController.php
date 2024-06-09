@@ -32,7 +32,7 @@ class HomeController extends Controller
     public function cameras(Project $project)
     {
         $cameras = Camera::with(['photos' => function ($query) {
-            return $query->limit(5)->whereDate('created_at', now())->latest();
+            return $query->limit(5)->latest();
         }])->where('is_active', true)
             ->where('project_id', $project->id)
             ->paginate(12);

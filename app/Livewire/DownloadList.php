@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\Models\Camera;
 use App\Models\Video;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -13,6 +12,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Storage;
 
 class DownloadList extends Component implements HasForms, HasTable
 {
@@ -44,9 +44,18 @@ class DownloadList extends Component implements HasForms, HasTable
             ->actions([
                 Action::make('download')
                     ->label('Download')
-                    ->action(fn (Video $record) => response()->download($record->getImagePath('file'), Str::replace('videos/', '', $record->file)))
+                    ->action(fn (Video $record) => $this->download($record))
                     ->button(),
             ]);
+    }
+
+    public function download(Video $record)
+    {
+        return response()->streamDownload(function () use ($record) {
+            $stream = Storage::readStream($record->file);
+            fpassthru($stream);
+            fclose($stream);
+        }, Str::replace('videos/', '', $record->file));
     }
 
     public function render()

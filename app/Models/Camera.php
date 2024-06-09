@@ -67,6 +67,16 @@ class Camera extends Model
         return $this->belongsTo(Project::class);
     }
 
+    public function lastActivity()
+    {
+        return $this->photos()
+            ->latest()
+            ->first()
+            ->created_at
+            ->format('d-M-Y h:i A')
+            ?? 'No activity yet';
+    }
+
     public function scopeFilterByRole($query, $user)
     {
         return $query->when(in_array($user->role, ['admin', 'project_admin', 'customer']), function ($query) use ($user) {

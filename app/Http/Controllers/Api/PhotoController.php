@@ -26,10 +26,8 @@ class PhotoController extends Controller
 
         $file = $request->file('image');
 
-        return ($this->extractDateTimeFromFilename($file));
-
         $camera->photos()->create([
-            'image' => $request->file('image')->store('Photos'),
+            'image' => $request->file('image')->store('photos'),
             'created_at' => $this->extractDateTimeFromFilename($file),
             'updated_at' => $this->extractDateTimeFromFilename($file),
         ]);

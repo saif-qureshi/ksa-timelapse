@@ -23,7 +23,7 @@ class PhotoController extends Controller
             ->when(!$request->has('range'), function ($query) use ($request) {
                 return $query->whereDate('created_at', $request->date('date')->startOfDay() ?? now()->startOfDay()->format('Y-m-d'));
             })
-            ->orderBy('created_at', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $response = [

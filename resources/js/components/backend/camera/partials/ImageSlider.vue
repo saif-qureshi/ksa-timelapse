@@ -16,7 +16,7 @@
             class="absolute flex justify-end items-start top-[50%] left-[50%] bg-black/30 w-full h-full translate-x-[-50%] translate-y-[-50%]"
           >
             <span class="bg-white px-2.5 rounded-es-md">
-              {{ dayjs(photo.created_at).format("HH:mm") }}
+              {{ photo.captured_at}}
             </span>
           </div>
         </li>

@@ -24,7 +24,11 @@ class PhotoController extends Controller
                 return $query->whereDate('created_at', $request->date('date')->startOfDay() ?? now()->startOfDay()->format('Y-m-d'));
             })
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->get()
+            ->map(function ($photo) {
+                $photo->captured_at = $photo->created_at->clone()->setTimezone('Asia/Dubai')->format('H:i a');
+                return $photo;
+            });;
 
         $response = [
             'photos' => $photos,

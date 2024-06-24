@@ -72,7 +72,7 @@ class Camera extends Model
         return $this->photos()
             ->latest()
             ->first()
-            ->created_at
+            ?->created_at
             ->format('d-M-Y h:i A')
             ?? 'No activity yet';
     }

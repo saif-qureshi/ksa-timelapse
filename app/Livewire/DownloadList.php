@@ -22,7 +22,11 @@ class DownloadList extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Video::query()->with('camera', 'camera.project', 'user')->where('status', '!=', 'failed')->filterByRole(auth()->user()))
+            ->query(Video::query()
+                ->with('camera', 'camera.project', 'user')
+                ->where('status', 'completed')
+                ->filterByRole(auth()->user())
+            )
             ->columns([
                 TextColumn::make('camera.name')
                     ->label('Camera')

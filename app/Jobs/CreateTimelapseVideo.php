@@ -18,6 +18,8 @@ class CreateTimelapseVideo implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, FileHelper;
 
+    public $timeout = 600;
+
     /**
      * Create a new job instance.
      */

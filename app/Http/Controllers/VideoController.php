@@ -50,8 +50,8 @@ class VideoController extends Controller
         $photos = $camera->photos()
             ->select('image')
             ->whereBetween('created_at', [$startDate, $endDate])
-            // ->whereTime('created_at', '>=', '08:00:00')
-            // ->whereTime('created_at', '<=', '17:00:00')
+            ->whereTime('created_at', '>=', '08:00:00')
+            ->whereTime('created_at', '<=', '17:00:00')
             ->latest()
             ->get()
             ->toArray();

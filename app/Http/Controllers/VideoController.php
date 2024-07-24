@@ -15,9 +15,9 @@ class VideoController extends Controller
 
     public function index(Camera $camera, Request $request)
     {
-        
-        $startDate = $request->date('start_date')->hour(8)->minute(0)->second(0);
-        $endDate = $request->date('end_date')->hour(16)->minute(0)->second(0);
+
+        $startDate = $request->date('start_date')->setTime(8, 0, 0);
+        $endDate = $request->date('end_date')->setTime(17, 0, 0);
 
         $videos = $camera->videos()
             ->whereDate('start_date', '>=', $startDate)
@@ -38,8 +38,8 @@ class VideoController extends Controller
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
         ]);
 
-        $startDate = $request->date('start_date')->hour(8)->minute(0)->second(0);
-        $endDate = $request->date('end_date')->hour(16)->minute(0)->second(0);
+        $startDate = $request->date('start_date', tz: $camera->timezone)->setTime(8, 0, 0);
+        $endDate = $request->date('end_date', tz: $camera->timezone)->setTime(17, 0, 0);
 
         if ($endDate->diffInMonths($startDate) > 4) {
             throw ValidationException::withMessages([
@@ -47,11 +47,18 @@ class VideoController extends Controller
             ]);
         }
 
+        $startTimeInUTC = $startDate->clone()->setTimezone('UTC')->format('H:i:s');
+        $endTimeInUTC = $endDate->clone()->setTimezone('UTC')->format('H:i:s');
+
+
         $photos = $camera->photos()
             ->select('image')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->whereTime('created_at', '>=', '08:00:00')
-            ->whereTime('created_at', '<=', '17:00:00')
+            ->whereBetween('created_at', [
+                $startDate->setTimezone('UTC')->toDateTimeString(),
+                $endDate->setTimezone('UTC')->toDateTimeString()
+            ])
+            ->whereTime('created_at', '>=', $startTimeInUTC)
+            ->whereTime('created_at', '<=', $endTimeInUTC)
             ->latest()
             ->get()
             ->toArray();
@@ -62,8 +69,8 @@ class VideoController extends Controller
 
         $video = $camera->videos()->create([
             'user_id' => auth()->id(),
-            'start_date' => $startDate->toDateString(),
-            'end_date' => $endDate->toDateString(),
+            'start_date' => $request->date('start_date')->toDateString(),
+            'end_date' => $request->date('end_date')->toDateString(),
         ]);
 
         CreateTimelapseVideo::dispatch($video, $photos);

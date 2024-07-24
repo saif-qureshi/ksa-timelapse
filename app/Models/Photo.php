@@ -12,7 +12,7 @@ class Photo extends Model
 {
     use HasFactory, FileHelper;
 
-    protected $appends = ['path'];
+    protected $appends = ['path', 'captured_at'];
 
     protected $fillable = ['image', 'created_at', 'updated_at'];
 
@@ -20,6 +20,15 @@ class Photo extends Model
     {
         return Attribute::make(
             get: fn () => $this->getImagePath('image'),
+        );
+    }
+
+    protected function capturedAt(): Attribute
+    {
+        $timezone = $this->camera->timezone ?? 'Asia/Dubai';
+
+        return Attribute::make(
+            get: fn () => $this->created_at->clone()->setTimezone($timezone)->format('H:i'),
         );
     }
 

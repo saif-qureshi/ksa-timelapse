@@ -28,8 +28,8 @@ class PhotoController extends Controller
 
         $camera->photos()->create([
             'image' => $request->file('image')->store('photos'),
-            'created_at' => $this->extractDateTimeFromFilename($file),
-            'updated_at' => $this->extractDateTimeFromFilename($file),
+            'created_at' => $this->extractDateTimeFromFilename($file, $camera->timezone),
+            'updated_at' => $this->extractDateTimeFromFilename($file, $camera->timezone),
         ]);
 
         Log::info('Photo uploaded successfully .' . now()->setTimezone('Asia/Karachi')->toDateTimeString());
@@ -37,7 +37,7 @@ class PhotoController extends Controller
         return response()->json('Photo uploaded successfully', 200);
     }
 
-    protected function extractDateTimeFromFilename(UploadedFile $file)
+    protected function extractDateTimeFromFilename(UploadedFile $file, $timezone)
     {
         $pattern = '/(\d{14})\.(jpg|jpeg|png)/';
 
@@ -45,9 +45,7 @@ class PhotoController extends Controller
 
         if (preg_match($pattern, $filename, $matches)) {
             $dateTimeString = $matches[1];
-
-            $dateTime = Carbon::createFromFormat('YmdHis', $dateTimeString);
-
+            $dateTime = Carbon::createFromFormat('YmdHis', $dateTimeString, $timezone)->setTimezone('UTC');
             return $dateTime;
         }
 

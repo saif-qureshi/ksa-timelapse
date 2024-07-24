@@ -12,6 +12,12 @@ class Camera extends Model
 {
     use HasFactory, HasApiWhere, FileHelper;
 
+    // timezone_identifiers_list 
+    const TIMEZONES = [
+        'Asia/Dubai',
+        'Asia/Riyadh',
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -23,7 +29,7 @@ class Camera extends Model
 
     protected $fillable = [
         'index', 'name', 'description', 'longitude', 'latitude', 'developer_id', 'project_id',
-        'is_active', 'video_template_1', 'video_template_2', 'access_token'
+        'is_active', 'video_template_1', 'video_template_2', 'access_token', 'timezone'
     ];
 
     protected $hidden = ['access_token'];

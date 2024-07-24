@@ -25,7 +25,7 @@ class PhotoController extends Controller
         $camera = Camera::where('access_token', $token)->first();
 
         $file = $request->file('image');
-        
+
         $camera->photos()->create([
             'image' => $request->file('image')->store('photos'),
             'created_at' => $this->extractDateTimeFromFilename($file, $camera->timezone),
@@ -45,17 +45,10 @@ class PhotoController extends Controller
 
         if (preg_match($pattern, $filename, $matches)) {
             $dateTimeString = $matches[1];
-
             $dateTime = Carbon::createFromFormat('YmdHis', $dateTimeString, $timezone)->setTimezone('UTC');
-
             return $dateTime;
         }
 
         return Carbon::now();
-
-        DB::table('photos')->update([
-            'created_at' => DB::raw('CONVERT_TZ(created_at, "UTC", "Asia/Dubai")'),
-            'updated_at' => DB::raw('CONVERT_TZ(updated_at, "UTC", "Asia/Dubai")'),
-        ]);
     }
 }

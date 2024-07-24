@@ -23,6 +23,15 @@ class Photo extends Model
         );
     }
 
+    protected function capturedAt(): Attribute
+    {
+        $timezone = $this->camera->timezone ?? 'Asia/Dubai';
+
+        return Attribute::make(
+            get: fn () => $this->created_at->clone()->setTimezone($timezone)->format('H:i'),
+        );
+    }
+
     public function camera(): BelongsTo
     {
         return $this->belongsTo(Camera::class);

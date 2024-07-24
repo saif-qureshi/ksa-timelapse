@@ -23,9 +23,11 @@ class CameraController extends Controller
      */
     public function create()
     {
+        $timezones = collect(Camera::TIMEZONES);
+
         $developers = Developer::selectRaw('id as value, name as label')->where('is_active', true)->get();
 
-        return view('camera.create', compact('developers'));
+        return view('camera.create', compact('developers', 'timezones'));
     }
 
     /**
@@ -53,9 +55,11 @@ class CameraController extends Controller
      */
     public function edit(Camera $camera)
     {
+        $timezones = collect(Camera::TIMEZONES);
+
         $developers = Developer::selectRaw('id as value, name as label')->where('is_active', true)->get();
 
-        return view('camera.edit', compact('developers', 'camera'));
+        return view('camera.edit', compact('developers', 'camera', 'timezones'));
     }
 
     /**

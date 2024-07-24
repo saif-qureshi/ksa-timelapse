@@ -31,6 +31,7 @@ class CameraRequest extends FormRequest
             'is_active' => 'nullable|boolean',
             'video_template_1' => 'nullable|string',
             'video_template_2' => 'nullable|string',
+            'timezone' => 'required|in:Asia/Dubai,Asia/Riyadh',
         ];
     }
 }

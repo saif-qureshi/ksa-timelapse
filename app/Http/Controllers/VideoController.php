@@ -38,8 +38,8 @@ class VideoController extends Controller
             'end_date' => 'required|date_format:Y-m-d|after:start_date',
         ]);
 
-        $startDate = $request->date('start_date')->setTimezone($camera->timezone ?? 'Asia/Dubai')->setTime(8, 0, 0);
-        $endDate = $request->date('end_date')->setTimezone($camera->timezone ?? 'Asia/Dubai')->setTime(17, 0, 0);
+        $startDate = $request->date('start_date', tz: $camera->timezone)->setTime(8, 0, 0);
+        $endDate = $request->date('end_date', tz: $camera->timezone)->setTime(17, 0, 0);
 
         if ($endDate->diffInMonths($startDate) > 4) {
             throw ValidationException::withMessages([
@@ -69,8 +69,8 @@ class VideoController extends Controller
 
         $video = $camera->videos()->create([
             'user_id' => auth()->id(),
-            'start_date' => $startDate->toDateString(),
-            'end_date' => $endDate->toDateString(),
+            'start_date' => $request->date('start_date')->toDateString(),
+            'end_date' => $request->date('end_date')->toDateString(),
         ]);
 
         CreateTimelapseVideo::dispatch($video, $photos);

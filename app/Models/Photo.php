@@ -12,7 +12,7 @@ class Photo extends Model
 {
     use HasFactory, FileHelper;
 
-    protected $appends = ['path'];
+    protected $appends = ['path', 'captured_at'];
 
     protected $fillable = ['image', 'created_at', 'updated_at'];
 

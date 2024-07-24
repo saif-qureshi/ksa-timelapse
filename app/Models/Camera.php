@@ -12,6 +12,7 @@ class Camera extends Model
 {
     use HasFactory, HasApiWhere, FileHelper;
 
+    // timezone_identifiers_list 
     const TIMEZONES = [
         'Asia/Dubai',
         'Asia/Riyadh',

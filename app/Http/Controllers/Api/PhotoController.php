@@ -47,8 +47,10 @@ class PhotoController extends Controller
             $dateTimeString = $matches[1];
 
             $dateTime = Carbon::createFromFormat('YmdHis', $dateTimeString, $timezone);
+            
             if($timezone == 'UTC') return $dateTime;
-            $dateTime = Carbon::createFromFormat('YmdHis', $dateTimeString, $timezone)->setTimezone('UTC');
+
+            $dateTime = $dateTime->setTimezone('UTC');
 
             return $dateTime;
         }

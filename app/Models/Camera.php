@@ -18,6 +18,16 @@ class Camera extends Model
         'Asia/Riyadh',
     ];
 
+    protected $fillable = [
+        'index', 'name', 'description', 'longitude', 'latitude', 'developer_id', 'project_id',
+        'is_active', 'video_template_1', 'video_template_2', 'access_token', 'timezone'
+    ];
+
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -26,11 +36,6 @@ class Camera extends Model
             $item->access_token = (new self)->getAccessToken();
         });
     }
-
-    protected $fillable = [
-        'index', 'name', 'description', 'longitude', 'latitude', 'developer_id', 'project_id',
-        'is_active', 'video_template_1', 'video_template_2', 'access_token', 'timezone'
-    ];
 
     protected $hidden = ['access_token'];
 
@@ -79,6 +84,7 @@ class Camera extends Model
             ->latest()
             ->first()
             ?->created_at
+            ->setTimezone($this->timezone)
             ->format('d-M-Y h:i A')
             ?? 'No activity yet';
     }

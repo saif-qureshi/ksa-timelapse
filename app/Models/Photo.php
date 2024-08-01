@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Traits\FileHelper;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
 
 class Photo extends Model
 {
@@ -35,5 +37,24 @@ class Photo extends Model
     public function camera(): BelongsTo
     {
         return $this->belongsTo(Camera::class);
+    }
+
+    public function scopeWhereRangeIn(Builder $query, Carbon $startDate, Carbon $endDate)
+    {
+        $startDate = $startDate->setTimezone('UTC')->startOfDay();
+        $endDate = $endDate->setTimezone('UTC')->endOfDay();
+
+        return $query->whereBetween('created_at', [$startDate, $endDate]);
+    }
+
+    public function scopeWhereDateIn(Builder $query, Carbon $date)
+    {
+        $startOfDay = $date->copy()->startOfDay();
+        $endOfDay = $date->copy()->endOfDay();
+
+        $startOfDayUTC = $startOfDay->setTimezone('UTC');
+        $endOfDayUTC = $endOfDay->setTimezone('UTC');
+
+        return $query->whereBetween('created_at', [$startOfDayUTC, $endOfDayUTC]);
     }
 }

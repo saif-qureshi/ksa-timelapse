@@ -13,25 +13,13 @@ class PhotoController extends Controller
 
     public function index(Request $request, Camera $camera)
     {
-        $startDate = $request->has('start_date') ? $request->date('start_date', tz: $camera->timezone) : now()->startOf('month');
-        $endDate = $request->has('end_date') ? $request->date('end_date', tz: $camera->timezone) : now()->endOf('month');
-
-        $startDate = $startDate->setTimezone('UTC')->startOfDay();
-        $endDate = $endDate->setTimezone('UTC')->endOfDay();
-
-        $date = $request->has('date') ? $request->date('date', tz: $camera->timezone) : now($camera->timezone);
-        $date = $date->setTimezone('UTC');
+        $startDate = $request->date('start_date', tz: $camera->timezone) ?? now()->startOf('month');
+        $endDate = $request->date('end_date', tz: $camera->timezone) ?? now()->endOf('month');
+        $date = $request->date('date', tz: $camera->timezone) ?? now($camera->timezone);
 
         $photos = $camera->photos()
-            ->when($request->has('range') && $request->range, function ($query) use ($startDate, $endDate) {
-                return $query->whereBetween('created_at', [
-                    $startDate,
-                    $endDate,
-                ]);
-            })
-            ->when(!$request->has('range'), function ($query) use ($date) {
-                return $query->whereDate('created_at', $date->toDateString());
-            })
+            ->when($request->has('range') && $request->range, fn ($query) => $query->whereRangeIn($startDate, $endDate))
+            ->when(!$request->has('range'), fn ($query) => $query->whereDateIn($date))
             ->orderBy('created_at', 'desc')
             ->get();
 

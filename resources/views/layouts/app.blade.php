@@ -12,7 +12,6 @@
 <body class="py-5 md:py-0">
     <div class="flex overflow-hidden">
         <x-admin.sidebar>
-
         </x-admin.sidebar>
         <div class="content" id="app">
             {{ $slot }}

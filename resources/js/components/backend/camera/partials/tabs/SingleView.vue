@@ -50,7 +50,7 @@
         </Panzoom>
       </div>
     </div>
-    <div class="mt-5">
+    <div class="mt-5 px-4">
       <div class="flex justify-between items-center">
         <div>
           <label class="block mb-3">Photos Date: </label>

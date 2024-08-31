@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-12 bg-white p-5 rounded-md" style="max-height: 75vh;overflow-y: scroll;">
+  <div class="bg-white rounded-md">
     <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top" class="sticky top-0 z-50">
       <a-tab-pane v-for="tab in tabs" :key="tab.key">
         <template #tab>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref } from "vue";
 import Icon from "../../Icon.vue";
 import SingleView from "./partials/tabs/SingleView.vue";
 import SideBySide from "./partials/tabs/SideBySide.vue";
@@ -28,6 +28,30 @@ import VideoGenerate from "./partials/tabs/VideoGenerate.vue";
 const { camera, user } = defineProps({
   camera: Object,
   user: Object,
+});
+
+onMounted(async () => {
+  await nextTick()
+  const parent = document.getElementById('backend-app');
+  const element = document.querySelector('.ant-tabs-nav');
+
+
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      element.style.width = `${parent.offsetWidth}px`; ;
+      element.classList.add('fixed-top');
+    } else {
+      // remove widht
+      element.style.width = '';
+      element.classList.remove('fixed-top');
+    }
+  };
+
+  window.addEventListener('scroll', handleScroll);
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+  });
 });
 
 const tabs = [
@@ -104,10 +128,18 @@ let activeKey = ref(1);
 
 <style>
 #backend-app .ant-tabs-nav {
-  position: sticky;
-  top: -20px;
+  /* position: sticky; */
+  /* top: -20px; */
   z-index: 999;
   background: #fff;
-  padding: 10px 0;
+  padding: 10px;
+  margin-bottom: 0px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.fixed-top {
+  position: fixed !important;
+  top: 0;
 }
 </style>

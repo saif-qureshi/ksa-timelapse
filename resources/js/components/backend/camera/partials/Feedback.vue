@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white py-5 rounded-md mt-5">
+  <div class="bg-white p-5 rounded-md mt-5">
     <div class="border-b flex gap-2 mb-5">
       <Icon name="MessageCircleMore" :size="30" />
       <h1 class="text-2xl">Post Your Feedback</h1>

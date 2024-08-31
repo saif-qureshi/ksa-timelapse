@@ -1,10 +1,6 @@
 <template>
   <div>
-    <a-slider v-model:value="zoomLevel" :min="1" :max="5" :step="0.1" />
-    <div
-      ref="panzoomContainer"
-      style="width: 100%; height: 100%; overflow: hidden"
-    >
+    <div ref="panzoomContainer" style="width: 100%; height: 100%; overflow: hidden">
       <div ref="panzoom" style="width: 100%; height: 100%">
         <slot></slot>
       </div>
@@ -13,28 +9,30 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from "vue";
+import { ref, onMounted, onUnmounted, watch, nextTick } from "vue";
 import Panzoom from "@panzoom/panzoom";
 
 const panzoomContainer = ref(null);
 const panzoom = ref(null);
 let instance;
-const zoomLevel = ref(1);
 
-onMounted(() => {
-  instance = Panzoom(panzoom.value);
+onMounted(async () => {
+  await nextTick();
+
+  instance = Panzoom(panzoom.value, {
+    minScale: 1,
+    maxScale: 4,
+  });
   instance.pan(10, 10);
+
+  panzoomContainer.value.addEventListener("wheel", instance.zoomWithWheel);
+
+  onUnmounted(() => {
+    panzoomContainer.value.removeEventListener("wheel", instance.zoomWithWheel);
+    if (instance) {
+      instance.destroy();
+    }
+  });
 });
 
-onUnmounted(() => {
-  if (instance) {
-    instance.destroy();
-  }
-});
-
-watch(zoomLevel, (newValue) => {
-  if (instance) {
-    instance.zoom(newValue, { animate: true });
-  }
-});
 </script>

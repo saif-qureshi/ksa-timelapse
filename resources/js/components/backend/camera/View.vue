@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded-md">
-    <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top" class="sticky top-0 z-50">
+    <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top">
       <a-tab-pane v-for="tab in tabs" :key="tab.key">
         <template #tab>
           <div class="flex items-center gap-1">
@@ -10,6 +10,9 @@
         </template>
         <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" />
       </a-tab-pane>
+      <template #tabBarExtraContent>
+        <a-button type="primary" @click="goBack">Go Back</a-button>
+      </template>
     </a-tabs>
   </div>
 </template>
@@ -38,7 +41,7 @@ onMounted(async () => {
 
   const handleScroll = () => {
     if (window.scrollY > 100) {
-      element.style.width = `${parent.offsetWidth}px`; ;
+      element.style.width = `${parent.offsetWidth}px`;;
       element.classList.add('fixed-top');
     } else {
       // remove widht
@@ -124,6 +127,10 @@ const tabs = [
 ];
 
 let activeKey = ref(1);
+
+const goBack = () => {
+  window.history.back();
+};
 </script>
 
 <style>

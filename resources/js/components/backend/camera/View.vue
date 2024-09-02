@@ -37,16 +37,24 @@ onMounted(async () => {
   await nextTick()
   const parent = document.getElementById('backend-app');
   const element = document.querySelector('.ant-tabs-nav');
-
+  const scroller = document.getElementById('zoomScroller');
 
   const handleScroll = () => {
     if (window.scrollY > 100) {
       element.style.width = `${parent.offsetWidth}px`;;
       element.classList.add('fixed-top');
+      if (scroller) {
+        scroller.style.position = 'fixed';
+        scroller.style.top = '10px';
+      }
     } else {
       // remove widht
       element.style.width = '';
       element.classList.remove('fixed-top');
+      if (scroller) {
+        scroller.style.position = 'relative';
+        scroller.style.top = '0';
+      }
     }
   };
 
@@ -135,15 +143,19 @@ const goBack = () => {
 
 <style>
 #backend-app .ant-tabs-nav {
-  /* position: sticky; */
-  /* top: -20px; */
   z-index: 999;
   background: #fff;
   padding: 10px;
   margin-bottom: 0px;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  flex-direction: row-reverse;
+  justify-content: space-between;
 }
+
+#backend-app .ant-tabs-nav .ant-tabs-nav-wrap {
+  flex: none;
+}
+
+
 
 .fixed-top {
   position: fixed !important;

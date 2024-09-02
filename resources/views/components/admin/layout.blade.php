@@ -61,7 +61,7 @@
         @if (!Route::is('camera.show'))
             <x-admin.sidebar></x-admin.sidebar>
         @endif
-        <div class="content" id="app">
+        <div class="content @if(Route::is('camera.show')) !p-0 mt-0 @endif" id="app">
             {{ $slot }}
         </div>
     </div>

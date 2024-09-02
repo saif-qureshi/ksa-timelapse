@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Camera;
 use App\Models\Photo;
 use App\Traits\FileHelper;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class PhotoController extends Controller
@@ -18,8 +19,8 @@ class PhotoController extends Controller
         $date = $request->date('date', tz: $camera->timezone) ?? now($camera->timezone);
 
         $photos = $camera->photos()
-            ->when($request->has('range') && $request->range, fn ($query) => $query->whereRangeIn($startDate, $endDate))
-            ->when(!$request->has('range'), fn ($query) => $query->whereDateIn($date))
+            ->when($request->has('range') && $request->range, fn($query) => $query->whereRangeIn($startDate, $endDate))
+            ->when(!$request->has('range'), fn($query) => $query->whereDateIn($date))
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -28,7 +29,7 @@ class PhotoController extends Controller
         ];
 
         if ($request->has('date')) {
-            $response['dates'] = $this->getDatesWithoutData($camera);
+            $response['dates'] = $this->getDatesWithoutData($date, $camera);
         }
 
         return response()->json($response);
@@ -43,25 +44,30 @@ class PhotoController extends Controller
         return response()->json('Photo deleted successfully', 200);
     }
 
-    public function getDatesWithoutData(Camera $camera)
+    public function getDatesWithoutData(Carbon $date, Camera $camera)
     {
-        $requestedDate = request()->date('date');
-
-        $startDate = $requestedDate->copy()->startOfMonth();
-        $endDate = $requestedDate->copy()->endOfMonth();
+        $startDate = $date->copy()->startOfMonth();
+        $endDate = $date->copy()->endOfMonth();
 
         $datesInRange = collect([]);
-        for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
-            $datesInRange->push($date->format('Y-m-d'));
+
+        for ($currentDate = $startDate->copy(); $currentDate->lte($endDate); $currentDate->addDay()) {
+            $datesInRange->push($currentDate->format('Y-m-d'));
         }
 
         $datesWithData = $camera->photos()
-            ->selectRaw('date(created_at) as date')
-            ->whereBetween('created_at', [request()->date('date')->startOfMonth(), request()->date('date')->endOfMonth()])
+            ->selectRaw('created_at')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->distinct()
             ->get()
-            ->pluck('date');
-
+            ->pluck('created_at')
+            ->map(function ($createdAt) use ($camera) {
+                return Carbon::parse($createdAt, 'UTC')   
+                    ->setTimezone($camera->timezone)
+                    ->format('Y-m-d');              
+            })
+            ->unique()
+            ->values();
         $datesWithoutData = $datesInRange->diff($datesWithData)->values()->toArray();
 
         return $datesWithoutData;

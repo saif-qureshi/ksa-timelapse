@@ -1,19 +1,15 @@
 <template>
   <div class="bg-white rounded-md">
-    <a-tabs v-model:activeKey="activeKey" type="card" tabPosition="top">
-      <a-tab-pane v-for="tab in tabs" :key="tab.key">
-        <template #tab>
-          <div class="flex items-center gap-1">
-            <Icon :name="tab.icon" :size="20" />
-            <span>{{ tab.label }}</span>
-          </div>
-        </template>
-        <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" />
-      </a-tab-pane>
-      <template #tabBarExtraContent>
-        <a-button type="primary" @click="goBack">Go Back</a-button>
-      </template>
-    </a-tabs>
+    <div class="flex p-2">
+      <a-button type="primary" @click="goBack">Go Back</a-button>
+      <div class="ml-auto">
+        <a-button class="h-10 w-10 flex justify-center items-center p-0" @click="toggleDrawer">
+          <Menu />
+        </a-button>
+      </div>
+    </div>
+    <!-- <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" /> -->
+    <ToolsDrawer :visible="visible" @onClose="toggleDrawer" />
   </div>
 </template>
 
@@ -27,6 +23,8 @@ import ZoomView from "./partials/tabs/ZoomView.vue";
 import Compare from "./partials/tabs/Compare.vue";
 import VideosList from "./partials/tabs/VideosList.vue";
 import VideoGenerate from "./partials/tabs/VideoGenerate.vue";
+import { Menu } from 'lucide-vue-next';
+import ToolsDrawer from "./partials/ToolsDrawer.vue";
 
 const { camera, user } = defineProps({
   camera: Object,
@@ -64,6 +62,8 @@ onMounted(async () => {
     window.removeEventListener('scroll', handleScroll);
   });
 });
+
+const visible = ref(false)
 
 const tabs = [
   {
@@ -134,8 +134,9 @@ const tabs = [
   },
 ];
 
-let activeKey = ref(1);
-
+const toggleDrawer = () => {
+  visible.value = !visible.value
+}
 const goBack = () => {
   window.history.back();
 };
@@ -155,10 +156,12 @@ const goBack = () => {
   flex: none;
 }
 
-
-
 .fixed-top {
   position: fixed !important;
   top: 0;
+}
+
+.ant-drawer-body {
+  padding-left: 15px;
 }
 </style>

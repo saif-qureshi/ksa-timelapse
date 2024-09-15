@@ -1,21 +1,25 @@
 <template>
   <div class="bg-white rounded-md">
-    <div class="flex p-2">
+    <div class="flex items-center justify-between p-2">
       <a-button type="primary" @click="goBack">Go Back</a-button>
-      <div class="ml-auto">
-        <a-button class="h-10 w-10 flex justify-center items-center p-0" @click="toggleDrawer">
-          <Menu />
-        </a-button>
-      </div>
+      <h1>Camera Name</h1>
+      <a-button class="h-10 w-10 flex justify-center items-center p-0" @click="toggleDrawer">
+        <Menu />
+      </a-button>
+      
     </div>
+    <div class="flex gap-4"></div>
     <!-- <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" /> -->
-    <ToolsDrawer :visible="visible" @onClose="toggleDrawer" />
+    <tools-drawer 
+      v-model:open="visible" 
+      :activeKey="activeKey"
+      @onChange="handleToolSelection" 
+    />
   </div>
 </template>
 
 <script setup>
 import { nextTick, onMounted, onUnmounted, ref } from "vue";
-import Icon from "../../Icon.vue";
 import SingleView from "./partials/tabs/SingleView.vue";
 import SideBySide from "./partials/tabs/SideBySide.vue";
 import SpotCompare from "./partials/tabs/SpotCompare.vue";
@@ -23,6 +27,7 @@ import ZoomView from "./partials/tabs/ZoomView.vue";
 import Compare from "./partials/tabs/Compare.vue";
 import VideosList from "./partials/tabs/VideosList.vue";
 import VideoGenerate from "./partials/tabs/VideoGenerate.vue";
+
 import { Menu } from 'lucide-vue-next';
 import ToolsDrawer from "./partials/ToolsDrawer.vue";
 
@@ -64,75 +69,7 @@ onMounted(async () => {
 });
 
 const visible = ref(false)
-
-const tabs = [
-  {
-    key: 1,
-    icon: "Image",
-    label: "Single View",
-    children: SingleView,
-    props: {
-      mode: "single",
-    },
-  },
-  {
-    key: 2,
-    icon: "ZoomIn",
-    label: "Zoom",
-    children: ZoomView,
-    props: {
-      mode: "zoom",
-    },
-  },
-  {
-    key: 3,
-    icon: "Columns2",
-    label: "Side By Side",
-    children: SideBySide,
-    props: {
-      mode: "single",
-    },
-  },
-  {
-    key: 4,
-    icon: "Search",
-    label: "Spot Zoom",
-    children: SingleView,
-    props: {
-      mode: "spot-zoom",
-    },
-  },
-  {
-    key: 5,
-    icon: "Search",
-    label: "Spot Compare",
-    children: SpotCompare,
-    props: {
-      mode: "spot-zoom",
-    },
-  },
-  {
-    key: 6,
-    icon: "GitCompare",
-    label: "Compare",
-    children: Compare,
-    props: {},
-  },
-  {
-    key: 7,
-    icon: "Film",
-    label: "Video",
-    children: VideosList,
-    props: {},
-  },
-  {
-    key: 8,
-    icon: "SearchCheck",
-    label: "Custom Video",
-    children: VideoGenerate,
-    props: {},
-  },
-];
+const activeKey = ref('single-view')
 
 const toggleDrawer = () => {
   visible.value = !visible.value
@@ -140,6 +77,11 @@ const toggleDrawer = () => {
 const goBack = () => {
   window.history.back();
 };
+
+const handleToolSelection = (key) => {
+  activeKey.value = key
+}
+
 </script>
 
 <style>

@@ -1,13 +1,15 @@
 <template>
-	<a-drawer title="Tools" placement="right" v-model:open="openDrawer">
+	<div class="px-5 p-2 rounded-full shadow-md absolute top-5 left-1/2 -translate-x-1/2 bg-white flex gap-2 overflow-x-auto">
 		<template v-for="tab in tabs" :key="tab.key">
-			<div :class="['flex items-center cursor-pointer gap-4 p-3 rounded-lg hover:bg-gray-50 mb-2', { 'bg-blue-500 text-white hover:bg-blue-500 ': activeKey === tab.key }]"
-				@click="emit('onChange', tab.key)">
-				<Icon :name="tab.icon" :size="20" />
-				<span>{{ tab.label }}</span>
-			</div>
+			<a-tooltip :title="tab.label" placement="top">
+				<a-button
+					:class="['flex items-center justify-center cursor-pointer gap-2 p-2 h-10 w-10  border-none shadow-none rounded-md transition-all duration-300', { 'bg-blue-500 text-white hover:bg-blue-700 ': activeKey === tab.key, 'hover:bg-gray-100': activeKey !== tab.key }]"
+					@click="emit('onChange', tab.key)">
+					<Icon :name="tab.icon" :size="20" />
+				</a-button>
+			</a-tooltip>
 		</template>
-	</a-drawer>
+	</div>
 </template>
 
 <script setup>

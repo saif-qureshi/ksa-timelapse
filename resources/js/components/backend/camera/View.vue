@@ -1,20 +1,31 @@
 <template>
   <div class="bg-white rounded-md">
-    <div class="flex items-center justify-between p-2">
-      <a-button type="primary" @click="goBack">Go Back</a-button>
-      <h1>Camera Name</h1>
-      <a-button class="h-10 w-10 flex justify-center items-center p-0" @click="toggleDrawer">
+    <div class="flex items-center justify-between p-2 bg-blue-500">
+      <a-button type="primary" @click="goBack" class="bg-white text-blue-500">
+        <Icon name="ArrowLeft" class="text-blue-500" size="16" />
+      </a-button>
+      <h1 class="text-white">{{ camera.name }}</h1>
+      <a-button class="invisible">
         <Menu />
       </a-button>
       
     </div>
-    <div class="flex gap-4"></div>
-    <!-- <component :is="tab.children" :camera="camera" v-bind="tab.props" :user="user" /> -->
-    <tools-drawer 
-      v-model:open="visible" 
-      :activeKey="activeKey"
-      @onChange="handleToolSelection" 
-    />
+    <div class="flex relative">
+      <div class="flex gap-4 flex-1">
+        <component 
+        class="flex-1 w-full"
+        :is="getActiveTab().children" 
+        :camera="camera" 
+        v-bind="getActiveTab().props" 
+        :user="user" 
+      />
+      <tools-drawer 
+        v-model:open="visible" 
+        :activeKey="activeKey"
+        @onChange="handleToolSelection" 
+      />
+    </div>
+    </div>
   </div>
 </template>
 
@@ -36,44 +47,78 @@ const { camera, user } = defineProps({
   user: Object,
 });
 
-onMounted(async () => {
-  await nextTick()
-  const parent = document.getElementById('backend-app');
-  const element = document.querySelector('.ant-tabs-nav');
-  const scroller = document.getElementById('zoomScroller');
-
-  const handleScroll = () => {
-    if (window.scrollY > 100) {
-      element.style.width = `${parent.offsetWidth}px`;;
-      element.classList.add('fixed-top');
-      if (scroller) {
-        scroller.style.position = 'fixed';
-        scroller.style.top = '10px';
-      }
-    } else {
-      // remove widht
-      element.style.width = '';
-      element.classList.remove('fixed-top');
-      if (scroller) {
-        scroller.style.position = 'relative';
-        scroller.style.top = '0';
-      }
+const tabs = ref([
+{
+		key: 'single-view',
+    children: SingleView,
+    props: {
+      camera: camera,
+      user: user,
+      mode: 'single',
     }
-  };
-
-  window.addEventListener('scroll', handleScroll);
-
-  onUnmounted(() => {
-    window.removeEventListener('scroll', handleScroll);
-  });
-});
+	},
+	{
+		key: 'zoom-in',
+    children: ZoomView,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+	{
+		key: 'side-by-side',
+    children: SideBySide,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+	{
+		key: 'spot-zoom',
+    children: SingleView,
+    props: {
+      camera: camera,
+      user: user,
+      mode: 'spot-zoom',
+    }
+	},
+	{
+		key: 'spot-compare',
+    children: SpotCompare,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+	{
+		key: 'compare',
+    children: Compare,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+	{
+		key: 'video',
+    children: VideosList,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+	{
+		key: 'custom-video',
+    children: VideoGenerate,
+    props: {
+      camera: camera,
+      user: user,
+    }
+	},
+])
 
 const visible = ref(false)
 const activeKey = ref('single-view')
 
-const toggleDrawer = () => {
-  visible.value = !visible.value
-}
 const goBack = () => {
   window.history.back();
 };
@@ -82,6 +127,9 @@ const handleToolSelection = (key) => {
   activeKey.value = key
 }
 
+const getActiveTab = () => {
+  return tabs.value.find(tab => tab.key === activeKey.value)
+}
 </script>
 
 <style>

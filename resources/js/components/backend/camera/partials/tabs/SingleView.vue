@@ -1,59 +1,66 @@
 <template>
   <div>
     <div class="image-wrapper">
-      <div class="" v-if="mode === 'single'">
-        <a-button
-          v-if="selectedPhoto.path"
-          class="absolute right-2 top-2 bg-black hover:bg-black/80! flex gap-x-2"
-          type="primary"
-          @click="toggleFullScreen"
+      <div class="relative" v-if="showMainImage && mode === 'single-view'" ref="imageRef">
+        <image-with-action         
+          :photo="selectedPhoto"
+          :can-go-next="canGoNext"
+          :can-go-prev="canGoPrev"
+          @next="goNext"
+          @prev="goPrev"
+          @fullscreen="toggleFullScreen"
         >
-          <Icon name="Fullscreen" :size="20" color="#fff" />
-          Full Screen
-        </a-button>
-        <div class="" ref="imageRef">
           <a-empty
             v-if="!selectedPhoto.path"
             description="No image available"
           />
-          <img v-else :src="selectedPhoto.path" class="w-full" />
-        </div>
-
-        <div v-if="showFullScreen" class="full-screen-overlay">
-          <div class="full-screen-container">
-            <a-empty
-              v-if="!selectedPhoto.path"
-              description="No image available"
-            />
-            <img
-              v-else
-              :src="selectedPhoto.path"
-              alt="Full Screen Image"
-              @click="showFullScreen = !showFullScreen"
-            />
-          </div>
-        </div>
+          <img 
+            v-else 
+            :src="selectedPhoto.path" 
+            :alt="selectedPhoto.title || 'Image'"
+            class="w-full" 
+          />
+        </image-with-action>
       </div>
-      <div v-if="mode === 'spot-zoom'">
-        <a-empty v-if="!selectedPhoto.path" description="No image available" />
-        <VueMagnifier
-          v-else
-          :src="selectedPhoto.path"
-          :mgWidth="300"
-          :mgHeight="300"
-        />
+      <div v-if="mode === 'spot-zoom'" ref="imageRef">
+        <image-with-action 
+          :photo="selectedPhoto"
+          :can-go-next="canGoNext"
+          :can-go-prev="canGoPrev"
+          @next="goNext"
+          @prev="goPrev"
+          @fullscreen="toggleFullScreen"
+        >
+          <a-empty v-if="!selectedPhoto.path" description="No image available" />
+          <vue-magnifier
+            v-else
+            :src="selectedPhoto.path"
+            :mgWidth="300"
+            :mgHeight="300"
+          />
+        </image-with-action>
       </div>
-      <div v-if="mode === 'zoom'">
-        <a-empty v-if="!selectedPhoto.path" description="No image available" />
-        <Panzoom v-else>
-          <img :src="selectedPhoto.path" alt="Image" class="w-full" />
-        </Panzoom>
+      <div v-if="mode === 'zoom-in'" ref="imageRef">
+        <image-with-action 
+          :photo="selectedPhoto"
+          :can-go-next="canGoNext"
+          :can-go-prev="canGoPrev"
+          @next="goNext"
+          @prev="goPrev"
+          @fullscreen="toggleFullScreen"
+        >
+          <a-empty v-if="!selectedPhoto.path" description="No image available" />
+          <panzoom v-else>
+            <img :src="selectedPhoto.path" :alt="selectedPhoto.title || 'Zoomable Image'" class="w-full" />
+          </panzoom>
+        </image-with-action>
       </div>
     </div>
+
     <div class="mt-5 px-4">
       <div class="flex justify-between items-center">
         <div>
-          <label class="block mb-3">Photos Date: </label>
+          <label class="block mb-3 text-sm font-medium">Photos Date: </label>
           <a-date-picker
             v-model:value="selectedDate"
             class="w-56"
@@ -61,11 +68,7 @@
           />
         </div>
         <a-popconfirm
-          v-if="
-            ['super_admin', 'admin', 'project_admin'].includes(user?.role) &&
-            mode === 'single' &&
-            selectedPhoto.path
-          "
+          v-if="canDeletePhoto"
           title="Are you sure to delete this photo?"
           @confirm="handleImageDelete"
         >
@@ -77,128 +80,152 @@
           </a-button>
         </a-popconfirm>
       </div>
-      <ImageSlider
+      <image-slider
         :photos="photos"
         :selected="selectedPhoto.id"
         @onSelect="handleImageSelect"
       />
     </div>
-    <Feedback :selectedPhoto="selectedPhoto" />
+    <feedback :selected-photo="selectedPhoto" />
   </div>
 </template>
 
 <script setup>
-import axios from "axios";
-import dayjs from "dayjs";
-import ImageSlider from "../ImageSlider.vue";
-import { onMounted, ref, watch } from "vue";
-import VueMagnifier from "@websitebeaver/vue-magnifier";
-import "@websitebeaver/vue-magnifier/styles.css";
-import Icon from "../../../../Icon.vue";
-import Feedback from "../Feedback.vue";
-import Panzoom from "../../../../Panzoom.vue";
+import { ref, watch, computed, onMounted } from 'vue'
+import axios from 'axios'
+import dayjs from 'dayjs'
+import ImageWithAction from '../ImageWithAction.vue'
+import VueMagnifier from '@websitebeaver/vue-magnifier'
+import '@websitebeaver/vue-magnifier/styles.css'
+import ImageSlider from '../ImageSlider.vue'
+import Feedback from '../Feedback.vue'
+import Panzoom from '../../../../Panzoom.vue'
 
-const { camera, mode, user } = defineProps({
-  camera: Object,
-  user: Object,
+const props = defineProps({
+  camera: {
+    type: Object,
+    required: true
+  },
+  user: {
+    type: Object,
+    required: true
+  },
   mode: {
     type: String,
-    default: null,
+    default: 'single-view'
   },
-});
+  selectedImage: {
+    type: Object,
+    default: null
+  },
+  showFullScreen: {
+    type: Boolean,
+    default: false
+  },
+  showMainImage: {
+    type: Boolean,
+    default: true
+  }
+})
 
-const imageRef = ref(null);
-const photos = ref([]);
-const disabledDates = ref([]);
-const selectedDate = ref(dayjs());
-const selectedPhoto = ref({});
-const showFullScreen = ref(false);
+const emit = defineEmits(['onImageChange'])
+
+const imageRef = ref(null)
+const photos = ref([])
+const disabledDates = ref([])
+const selectedDate = ref(dayjs())
+const selectedPhoto = ref({})
+
+const currentPhotoIndex = computed(() => {
+  return photos.value.findIndex(photo => photo.id === selectedPhoto.value.id)
+})
+
+const canGoNext = computed(() => {
+  return currentPhotoIndex.value >= 0 && currentPhotoIndex.value < photos.value.length - 1
+})
+
+const canGoPrev = computed(() => {
+  return currentPhotoIndex.value > 0
+})
+
+const canDeletePhoto = computed(() => {
+  return ['super_admin', 'admin', 'project_admin'].includes(props.user?.role) && 
+         props.mode === 'single-view' && 
+         selectedPhoto.value.path
+})
 
 const getPhotos = async () => {
-  const {
-    data: { photos: dbPhotos, dates },
-  } = await axios.post(`/camera/${camera.id}/photos`, {
-    date: selectedDate.value.format("YYYY-MM-DD"),
-  });
-  photos.value = dbPhotos;
-  disabledDates.value = dates;
-  if (dbPhotos.length > 0) {
-    selectedPhoto.value = dbPhotos[0];
+  try {
+    const { data: { photos: dbPhotos, dates } } = await axios.post(`/camera/${props.camera.id}/photos`, {
+      date: selectedDate.value.format('YYYY-MM-DD')
+    })
+    
+    photos.value = dbPhotos
+    disabledDates.value = dates
+    
+    if (dbPhotos.length > 0) {
+      if (props.selectedImage) {
+        getSelectedImage()
+      } else {
+        selectedPhoto.value = dbPhotos[0]
+      }
+    } else {
+      selectedPhoto.value = {}
+    }
+  } catch (error) {
+    console.error('Failed to fetch photos:', error)
   }
-};
+}
 
 const toggleFullScreen = () => {
-  showFullScreen.value = !showFullScreen.value;
-  const imageElement = imageRef.value;
-
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    if (imageElement.requestFullscreen) {
-      imageElement.requestFullscreen();
-    } else if (imageElement.webkitRequestFullscreen) {
-      imageElement.webkitRequestFullscreen();
-    } else if (imageElement.msRequestFullscreen) {
-      imageElement.msRequestFullscreen();
-    }
-  }
-};
+  imageRef.value.requestFullscreen()
+}
 
 const handleImageDelete = async () => {
-  await axios.delete(`/camera/${camera.id}/photos/${selectedPhoto.value.id}`);
-  await getPhotos();
-};
+  try {
+    await axios.delete(`/camera/${props.camera.id}/photos/${selectedPhoto.value.id}`)
+    photos.value = photos.value.filter(photo => photo.id !== selectedPhoto.value.id)
+  } catch (error) {
+    console.error('Failed to delete photo:', error)
+  }
+}
 
 const getDisableDates = (current) => {
-  return disabledDates.value.find(
-    (date) => date === dayjs(current).format("YYYY-MM-DD")
-  );
-};
-
-const emit = defineEmits(["onImageChange"]);
+  return !disabledDates.value.includes(dayjs(current).format('YYYY-MM-DD'))
+}
 
 const handleImageSelect = (photo) => {
-  selectedPhoto.value = photo;
-  emit("onImageChange", photo.path);
-};
+  selectedPhoto.value = photo
+  emit('onImageChange', photo.path)
+}
 
-const init = async () => {
-  await getPhotos();
-  emit("onImageChange", selectedPhoto.value.path);
-};
+const goNext = () => {
+  if (canGoNext.value) {
+    selectedPhoto.value = photos.value[currentPhotoIndex.value + 1]
+    emit('onImageChange', selectedPhoto.value.path)
+  }
+}
 
-onMounted(() => {
-  init();
-});
+const goPrev = () => {
+  if (canGoPrev.value) {
+    selectedPhoto.value = photos.value[currentPhotoIndex.value - 1]
+    emit('onImageChange', selectedPhoto.value.path)
+  }
+}
+
+const getSelectedImage = () => {
+  if (props.selectedImage) {
+    const photo = photos.value.find(photo => photo.path === props.selectedImage)
+    selectedPhoto.value = photo
+  }
+}
+
+onMounted(async () => {
+  await getPhotos()
+  emit('onImageChange', selectedPhoto.value.path)
+})
 
 watch(selectedDate, () => {
-  getPhotos();
-});
+  getPhotos()
+})
 </script>
-
-<style>
-.full-screen-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-}
-
-.full-screen-container {
-  max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
-}
-
-.full-screen-container img {
-  max-width: 100%;
-  max-height: 100%;
-  cursor: pointer;
-}
-</style>

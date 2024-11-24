@@ -11,7 +11,14 @@
     <style>
         .login::after {
             background: url('{{ asset('storage/' . settings('login_bg_image')) }}') center top / cover;
+        }
 
+        @media (max-width: 450px) {
+            .login {
+                background-image: url('{{ asset('storage/' . settings('mobile_login_bg_image')) }}');
+                background-position: center;
+                background-size: cover;
+            }
         }
     </style>
 </head>

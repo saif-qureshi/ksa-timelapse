@@ -1,15 +1,8 @@
 <template>
-  <div class="">
+  <div class="p-5">
     <div class="space-x-2">
       <a-range-picker v-model:value="dates" />
       <a-button @click="getPhotos" :loading="searching"> Search </a-button>
-      <!-- <a-button
-        type="primary"
-        class="bg-blue-500"
-        :disabled="photos.length <= 0"
-      >
-        Download
-      </a-button> -->
       <a-button
         type="primary"
         class="bg-blue-500"

@@ -7608,14 +7608,6 @@ html body {
   }
 }
 
-@media (max-width: 450px) {
-  .login {
-    background-image: url(/dist/images/mobile-login.jpg);
-    background-position: center;
-    background-size: cover;
-  }
-}
-
 .login {
   position: relative;
   overflow: hidden;

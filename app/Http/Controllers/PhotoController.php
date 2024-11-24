@@ -24,6 +24,10 @@ class PhotoController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        if ($photos->isEmpty()) {
+            $photos = $camera->photos()->orderBy('created_at', 'desc')->get();
+        }
+
         $response = [
             'photos' => $photos,
         ];

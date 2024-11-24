@@ -9,7 +9,7 @@
       <div class="intro-y col-span-12">
         <div class="w-full intro-y box p-5">
           <a-form layout="vertical" class="w-full">
-            <div class="grid grid-cols-2 flex-wrap mb-6">
+            <div class="grid grid-cols-2 flex-wrap gap-5 mb-6">
               <a-form-item
                 label="Browse Login Image"
                 class="col-span-2 md:col-span-1"
@@ -29,6 +29,27 @@
                   class="block mt-1 text-red-500 text-xs font-semibold"
                 >
                   {{ hasError("login_bg_image") }}
+                </span>
+              </a-form-item>
+              <a-form-item
+                label="Browse Mobile Login Image"
+                class="col-span-2 md:col-span-1"
+              >
+                <FileUpload
+                  ref="coverPhotoPond"
+                  id="mobile_login_bg_image"
+                  accept_file_types="image/jpeg, image/png"
+                  label="Browse"
+                  @removeFile="onRemoveFile($event, 'mobile_login_bg_image')"
+                  max_file_size="1MB"
+                  @process="setImage($event, 'mobile_login_bg_image')"
+                  :my-files="data.mobile_login_bg_image"
+                />
+                <span
+                  v-if="hasError('mobile_login_bg_image')"
+                  class="block mt-1 text-red-500 text-xs font-semibold"
+                >
+                  {{ hasError("mobile_login_bg_image") }}
                 </span>
               </a-form-item>
             </div>

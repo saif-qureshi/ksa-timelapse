@@ -1,5 +1,5 @@
 <template>
-  <div class="space-x-3">
+  <div class="space-x-3 p-5">
     <a-range-picker v-model:value="dates" />
     <a-button @click="getVideos"> Search </a-button>
 
@@ -20,7 +20,7 @@
                 class="w-8 h-8 flex justify-center items-center p-0"
                 @click="() => downloadVideo(record)"
               >
-                <Icon name="Download" size="16" />
+                <icon name="Download" size="16" />
               </a-button>
             </a-tooltip>
             <a-tooltip title="Play video">
@@ -28,13 +28,13 @@
                 class="w-8 h-8 flex justify-center items-center p-0"
                 @click="() => playVideo(record)"
               >
-                <Icon name="Play" size="16" />
+                <icon name="Play" size="16" />
               </a-button>
             </a-tooltip>
             <a-tooltip title="Delete video">
               <a-popconfirm title="Delete Video" description="Are you sure you want to delete ?" @confirm="() => deleteVideo(record.id)">
                 <a-button class="w-8 h-8 flex justify-center items-center p-0">
-                  <Icon name="Trash" size="16" />
+                  <icon name="Trash" size="16" />
                 </a-button>
               </a-popconfirm>
             </a-tooltip>

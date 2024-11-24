@@ -29,23 +29,9 @@ onMounted(async () => {
   });
   instance.pan(10, 10);
 
-  const handleScroll = () => {
-    if (window.scrollY > 100) {
-      zoomSliderContainer.value.style.position = 'fixed';
-      zoomSliderContainer.value.style.top = '60px';
-    } else {
-      zoomSliderContainer.value.style.position = 'relative';
-      zoomSliderContainer.value.style.top = '0';
-    }
-  };
-
-  panzoomContainer.value.addEventListener("wheel", instance.zoomWithWheel);
-  window.addEventListener('scroll', handleScroll);
-
   onUnmounted(() => {
     panzoomContainer.value.removeEventListener("wheel", instance.zoomWithWheel);
-    window.removeEventListener('scroll', handleScroll);
-
+    
     if (instance) {
       instance.destroy();
     }

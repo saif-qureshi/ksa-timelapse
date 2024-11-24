@@ -1,5 +1,5 @@
 <template>
-	<div class="px-5 p-2 rounded-full shadow-md absolute top-5 left-1/2 -translate-x-1/2 bg-white flex gap-2 overflow-x-auto">
+	<div class="px-5 p-2 rounded-full shadow-md bg-white flex gap-2 overflow-x-auto">
 		<template v-for="tab in tabs" :key="tab.key">
 			<a-tooltip :title="tab.label" placement="top">
 				<a-button
@@ -47,14 +47,14 @@ const tabs = [
 		label: "Zoom",
 	},
 	{
+		key: 'spot-zoom',
+		icon: "ScanSearch",
+		label: "Spot Zoom",
+	},
+	{
 		key: 'side-by-side',
 		icon: "Columns2",
 		label: "Side By Side",
-	},
-	{
-		key: 'spot-zoom',
-		icon: "Search",
-		label: "Spot Zoom",
 	},
 	{
 		key: 'spot-compare',

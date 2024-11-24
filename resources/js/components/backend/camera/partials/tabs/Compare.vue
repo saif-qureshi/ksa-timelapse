@@ -1,17 +1,26 @@
 <template>
   <div>
     <a-spin v-if="!leftImage || !rightImage"/>
-    <VueCompareImage
+    <vue-compare-image
       v-if="leftImage && rightImage"
       :leftImage="leftImage"
       :rightImage="rightImage"
     />
     <div class="grid grid-cols-2 gap-5">
       <div class="col-span-2 md:col-span-1">
-        <SingleView :camera="camera" @onImageChange="(photo) => leftImage = photo"/>
+        <single-view 
+          :camera="camera" 
+          :show-main-image="false"
+          :selected-image="primaryImage"
+          @onImageChange="(photo) => leftImage = photo"
+        />
       </div>
       <div class="col-span-2 md:col-span-1">
-        <SingleView :camera="camera" @onImageChange="(photo) => rightImage = photo"/>
+        <single-view 
+          :camera="camera" 
+          :show-main-image="false"
+          @onImageChange="(photo) => rightImage = photo"
+        />
       </div>
     </div>
   </div>
@@ -22,10 +31,11 @@ import { VueCompareImage } from "vue3-compare-image";
 import { ref } from 'vue';
 import SingleView from "./SingleView.vue";
 
-const { camera } = defineProps({
+const { camera, primaryImage } = defineProps({
   camera: Object,
+  primaryImage: String
 });
 
-const leftImage = ref('');
+const leftImage = ref(primaryImage ?? '');
 const rightImage = ref('');
 </script>

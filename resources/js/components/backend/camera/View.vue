@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white rounded-md">
+  <div class="rounded-md relative">
     <div class="flex items-center flex-wrap gap-3 justify-between p-2 bg-blue-500">
-      <a-button type="primary" @click="window.history.back()" class="bg-white text-blue-500">
+      <a-button type="primary" @click="handleBack()" class="bg-white text-blue-500">
         <icon name="ArrowLeft" class="text-blue-500" size="20" />
       </a-button>
       <tools-drawer 
@@ -85,6 +85,10 @@ const primaryImage = ref(null);
 
 const handleImageChange = (image) => {
   primaryImage.value = image;
+}
+
+const handleBack = () => {
+  history.back();
 }
 
 </script>

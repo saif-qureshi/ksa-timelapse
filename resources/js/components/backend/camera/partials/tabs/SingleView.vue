@@ -14,12 +14,12 @@
             v-if="!selectedPhoto.path"
             description="No image available"
           />
-          <img 
-            v-else 
-            :src="selectedPhoto.path" 
-            :alt="selectedPhoto.title || 'Image'"
-            class="w-full" 
-          />
+            <img
+              v-else  
+              :src="selectedPhoto.path" 
+              :alt="selectedPhoto.title || 'Image'"
+              class="w-full" 
+            />
         </image-with-action>
       </div>
       <div v-if="mode === 'spot-zoom'" ref="imageRef">

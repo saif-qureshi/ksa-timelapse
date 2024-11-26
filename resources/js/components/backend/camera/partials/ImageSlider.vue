@@ -1,6 +1,6 @@
 <template>
   <div class="mt-5">
-    <div class="w-full overflow-x-auto">
+    <div class="w-full overflow-x-auto" style="max-width: 96vw;">
       <a-empty v-if="photos.length <= 0" description="No image available"/>
       <ul class="flex gap-2 mb-0" v-if="photos.length > 0">
         <li

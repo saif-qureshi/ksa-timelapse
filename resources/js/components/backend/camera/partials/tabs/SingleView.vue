@@ -2,53 +2,22 @@
   <div>
     <div class="image-wrapper">
       <div class="relative" v-if="showMainImage && mode === 'single-view'" ref="imageRef">
-        <image-with-action         
-          :photo="selectedPhoto"
-          :can-go-next="canGoNext"
-          :can-go-prev="canGoPrev"
-          @next="goNext"
-          @prev="goPrev"
-          @fullscreen="toggleFullScreen"
-        >
-          <a-empty
-            v-if="!selectedPhoto.path"
-            description="No image available"
-          />
-            <img
-              v-else  
-              :src="selectedPhoto.path" 
-              :alt="selectedPhoto.title || 'Image'"
-              class="w-full" 
-            />
+        <image-with-action :photo="selectedPhoto" :can-go-next="canGoNext" :can-go-prev="canGoPrev" @next="goNext"
+          @prev="goPrev" @fullscreen="toggleFullScreen">
+          <a-empty v-if="!selectedPhoto.path" description="No image available" />
+          <img v-else :src="selectedPhoto.path" :alt="selectedPhoto.title || 'Image'" class="w-full" />
         </image-with-action>
       </div>
       <div v-if="mode === 'spot-zoom'" ref="imageRef">
-        <image-with-action 
-          :photo="selectedPhoto"
-          :can-go-next="canGoNext"
-          :can-go-prev="canGoPrev"
-          @next="goNext"
-          @prev="goPrev"
-          @fullscreen="toggleFullScreen"
-        >
+        <image-with-action :photo="selectedPhoto" :can-go-next="canGoNext" :can-go-prev="canGoPrev" @next="goNext"
+          @prev="goPrev" @fullscreen="toggleFullScreen">
           <a-empty v-if="!selectedPhoto.path" description="No image available" />
-          <vue-magnifier
-            v-else
-            :src="selectedPhoto.path"
-            :mgWidth="300"
-            :mgHeight="300"
-          />
+          <vue-magnifier v-else :src="selectedPhoto.path" :mgWidth="300" :mgHeight="300" />
         </image-with-action>
       </div>
       <div v-if="mode === 'zoom-in'" ref="imageRef">
-        <image-with-action 
-          :photo="selectedPhoto"
-          :can-go-next="canGoNext"
-          :can-go-prev="canGoPrev"
-          @next="goNext"
-          @prev="goPrev"
-          @fullscreen="toggleFullScreen"
-        >
+        <image-with-action :photo="selectedPhoto" :can-go-next="canGoNext" :can-go-prev="canGoPrev" @next="goNext"
+          @prev="goPrev" @fullscreen="toggleFullScreen">
           <a-empty v-if="!selectedPhoto.path" description="No image available" />
           <panzoom v-else>
             <img :src="selectedPhoto.path" :alt="selectedPhoto.title || 'Zoomable Image'" class="w-full" />
@@ -58,33 +27,18 @@
     </div>
 
     <div class="mt-5 px-4">
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center flex-wrap md:flex-nowrap gap-2">
         <div>
           <label class="block mb-3 text-sm font-medium">Photos Date: </label>
-          <a-date-picker
-            v-model:value="selectedDate"
-            class="w-56"
-            :disabled-date="getDisableDates"
-          />
+          <a-date-picker v-model:value="selectedDate" class="w-56" :disabled-date="getDisableDates" />
         </div>
-        <a-popconfirm
-          v-if="canDeletePhoto"
-          title="Are you sure to delete this photo?"
-          @confirm="handleImageDelete"
-        >
-          <a-button
-            class="bg-red-500 hover:bg-red-600 text-white"
-            type="danger"
-          >
+        <a-popconfirm v-if="canDeletePhoto" title="Are you sure to delete this photo?" @confirm="handleImageDelete">
+          <a-button class="bg-red-500 hover:bg-red-600 text-white" type="danger">
             Delete This Photo
           </a-button>
         </a-popconfirm>
       </div>
-      <image-slider
-        :photos="photos"
-        :selected="selectedPhoto.id"
-        @onSelect="handleImageSelect"
-      />
+      <image-slider :photos="photos" :selected="selectedPhoto.id" @onSelect="handleImageSelect" />
     </div>
     <feedback :selected-photo="selectedPhoto" />
   </div>
@@ -149,9 +103,9 @@ const canGoPrev = computed(() => {
 })
 
 const canDeletePhoto = computed(() => {
-  return ['super_admin', 'admin', 'project_admin'].includes(props.user?.role) && 
-         props.mode === 'single-view' && 
-         selectedPhoto.value.path
+  return ['super_admin', 'admin', 'project_admin'].includes(props.user?.role) &&
+    props.mode === 'single-view' &&
+    selectedPhoto.value.path
 })
 
 const getPhotos = async () => {
@@ -159,10 +113,10 @@ const getPhotos = async () => {
     const { data: { photos: dbPhotos, dates } } = await axios.post(`/camera/${props.camera.id}/photos`, {
       date: selectedDate.value.format('YYYY-MM-DD')
     })
-    
+
     photos.value = dbPhotos
     disabledDates.value = dates
-    
+
     if (dbPhotos.length > 0) {
       if (props.selectedImage) {
         getSelectedImage()
@@ -191,7 +145,8 @@ const handleImageDelete = async () => {
 }
 
 const getDisableDates = (current) => {
-  return !disabledDates.value.includes(dayjs(current).format('YYYY-MM-DD'))
+  const formattedDate = dayjs(current).format('YYYY-MM-DD')
+  return disabledDates.value.includes(formattedDate)
 }
 
 const handleImageSelect = (photo) => {

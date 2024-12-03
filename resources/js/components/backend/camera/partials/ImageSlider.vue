@@ -1,14 +1,14 @@
 <template>
   <div class="mt-5">
-    <div class="w-full overflow-x-auto" style="max-width: 96vw;">
+    <div class="w-full overflow-x-auto max-w-[calc(100vw-4rem)] md:max-w-[96vw]">
       <a-empty v-if="photos.length <= 0" description="No image available"/>
       <ul class="flex gap-2 mb-0" v-if="photos.length > 0">
         <li
           v-for="photo in photos"
-          class="relative cursor-pointer"
+          class="relative cursor-pointer flex-shrink-0 flex-grow-0 md:flex-basis-[14rem] basis-[8rem]"
           :class="{ 'border-4 border-blue-500': selected === photo.id }"
           :key="photo.image"
-          :style="{flex: '0 0 14rem'}"
+          style="flex: 0 0 14rem;"
           @click="() => selectPhoto(photo)"
         >
           <img :src="photo.path" :alt="photo.image" class="h-full w-full object-contain" />

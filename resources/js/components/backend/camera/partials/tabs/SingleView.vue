@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, watch, computed, onMounted } from 'vue'
 import axios from 'axios'
 import dayjs from 'dayjs'
 import ImageWithAction from '../ImageWithAction.vue'
@@ -178,12 +178,6 @@ const getSelectedImage = () => {
 onMounted(async () => {
   await getPhotos()
   emit('onImageChange', selectedPhoto.value.path)
-})
-
-onBeforeUnmount(() => {
-  if (currentRequest.value) {
-    currentRequest.value.abort()
-  }
 })
 
 watch(selectedDate, () => {

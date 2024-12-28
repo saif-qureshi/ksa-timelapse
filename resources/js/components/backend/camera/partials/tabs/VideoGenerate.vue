@@ -12,7 +12,7 @@
       <div class="mb-3">
         <p>{{ photos.length }} images found</p>
       </div>
-      <a-carousel autoplay class="[&>div]:w-full [&>div]:max-w-[100vw]">
+      <a-carousel autoplay :dots="false" arrows class="[&>div]:w-full [&>div]:max-w-[100vw]">
         <div v-for="photo in photos" :key="`photo-${photo.id}`">
           <img :src="photo.path" :alt="photo.path" />
         </div>

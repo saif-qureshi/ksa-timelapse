@@ -24,8 +24,9 @@ class PhotoController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        if ($photos->isEmpty()) {
-            $photos = $camera->photos()->orderBy('created_at', 'desc')->get();
+        if ($photos->isEmpty() && !$request->has('range')) {
+            $availablePhoto = $camera->photos()->orderBy('created_at', 'desc')->first();
+            $photos = $camera->photos()->whereMonth('created_at', $availablePhoto->created_at->month)->get();
         }
 
         $response = [
@@ -66,9 +67,9 @@ class PhotoController extends Controller
             ->get()
             ->pluck('created_at')
             ->map(function ($createdAt) use ($camera) {
-                return Carbon::parse($createdAt, 'UTC')   
+                return Carbon::parse($createdAt, 'UTC')
                     ->setTimezone($camera->timezone)
-                    ->format('Y-m-d');              
+                    ->format('Y-m-d');
             })
             ->unique()
             ->values();

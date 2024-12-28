@@ -22,9 +22,5 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           port: ${{ secrets.DROPLET_SSH_PORT }}
           script: |
-            cd /var/www/timelapse
-            git stash
-            git pull origin dev
-            php artisan migrate
-            npm install
-            npm run build
+            cd /var/www/html/timelapse
+            bash deploy.sh

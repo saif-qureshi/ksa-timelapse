@@ -12,7 +12,7 @@
       <div class="mb-3">
         <p>{{ photos.length }} images found</p>
       </div>
-      <a-carousel autoplay :dots="false" arrows class="[&>div]:w-full [&>div]:max-w-[100vw]">
+      <a-carousel autoplay :dots="false" arrows class="[&>div]:w-full [&>div]:max-w-[96vw]">
         <div v-for="photo in photos" :key="`photo-${photo.id}`">
           <img :src="photo.path" :alt="photo.path" />
         </div>
@@ -85,3 +85,25 @@ onMounted(() => {
   getPhotos();
 });
 </script>
+
+<!-- <style>
+button.slick-arrow {
+  position: absolute;
+  top: 50% !important;
+  transform: translateY(-50%);
+  background: black;
+  width: 30px !important;
+  height: 30px !important;
+  border-radius: 50px;
+  z-index: 999;
+  color: white !important;
+}
+
+button.slick-arrow.slick-prev {
+  left: 5px;
+}
+
+button.slick-arrow.slick-next {
+  right: 5px;
+}
+</style> -->

@@ -22,5 +22,5 @@ jobs:
           key: ${{ secrets.DROPLET_SSH_PRIVATE_KEY }}
           port: ${{ secrets.DROPLET_SSH_PORT }}
           script: |
-            cd /var/www/html/timelapse
+            cd /var/www/html/app.timelapsmaster.com
             bash deploy.sh

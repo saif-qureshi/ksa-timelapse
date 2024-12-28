@@ -24,7 +24,7 @@ class PhotoController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        if ($photos->isEmpty()) {
+        if ($photos->isEmpty() && !$request->has('range')) {
             $availablePhoto = $camera->photos()->orderBy('created_at', 'desc')->first();
             $photos = $camera->photos()->whereMonth('created_at', $availablePhoto->created_at->month)->get();
         }

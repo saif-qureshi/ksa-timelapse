@@ -3,23 +3,18 @@
     <div class="space-x-2">
       <a-range-picker v-model:value="dates" />
       <a-button @click="getPhotos" :loading="searching"> Search </a-button>
-      <a-button
-        type="primary"
-        class="bg-blue-500"
-        :disabled="photos.length <= 0"
-        :loading="loading"
-        @click="generateTimelapse"
-      >
+      <a-button type="primary" class="bg-blue-500" :disabled="photos.length <= 0" :loading="loading"
+        @click="generateTimelapse">
         Generate
       </a-button>
     </div>
-    <div class="my-3">
+    <div class="my-3 w-full">
       <div class="mb-3">
         <p>{{ photos.length }} images found</p>
       </div>
-      <a-carousel autoplay :dots="false" arrows>
-        <div v-for="(photo, index) in photos" :key="`photo-${index}`">
-          <img :src="photo.path" alt="" />
+      <a-carousel autoplay class="[&>div]:w-full [&>div]:max-w-[100vw]">
+        <div v-for="photo in photos" :key="`photo-${photo.id}`">
+          <img :src="photo.path" :alt="photo.path" />
         </div>
       </a-carousel>
     </div>

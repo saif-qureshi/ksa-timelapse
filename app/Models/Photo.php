@@ -30,7 +30,7 @@ class Photo extends Model
         $timezone = $this->camera->timezone ?? 'Asia/Dubai';
 
         return Attribute::make(
-            get: fn () => $this->created_at->clone()->setTimezone($timezone)->format('H:i'),
+            get: fn () => $this->created_at?->clone()->setTimezone($timezone)->format('H:i'),
         );
     }
 
@@ -57,4 +57,5 @@ class Photo extends Model
 
         return $query->whereBetween('created_at', [$startOfDayUTC, $endOfDayUTC]);
     }
+    
 }

@@ -61,7 +61,6 @@ class VideoController extends Controller
             ->whereTime('created_at', '<=', $endTimeInUTC)
             ->latest()
             ->get()
-            ->setAppends([])
             ->toArray();
 
         if (count($photos) <= 0) {

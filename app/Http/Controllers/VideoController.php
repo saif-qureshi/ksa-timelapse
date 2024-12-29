@@ -60,7 +60,7 @@ class VideoController extends Controller
             ->whereTime('created_at', '>=', $startTimeInUTC)
             ->whereTime('created_at', '<=', $endTimeInUTC)
             ->latest()
-            ->makeHidden('captured_at')
+            ->withoutAppends()
             ->get()
             ->toArray();
 

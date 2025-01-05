@@ -12,6 +12,7 @@
           :camera="camera" 
           :show-main-image="false"
           :selected-image="primaryImage"
+          :last-captured-at="lastCapturedAt"
           @onImageChange="(photo) => leftImage = photo"
         />
       </div>
@@ -31,9 +32,10 @@ import { VueCompareImage } from "vue3-compare-image";
 import { ref } from 'vue';
 import SingleView from "./SingleView.vue";
 
-const { camera, primaryImage } = defineProps({
+const { camera, primaryImage, lastCapturedAt } = defineProps({
   camera: Object,
-  primaryImage: String
+  primaryImage: String,
+  lastCapturedAt: String
 });
 
 const leftImage = ref(primaryImage ?? '');

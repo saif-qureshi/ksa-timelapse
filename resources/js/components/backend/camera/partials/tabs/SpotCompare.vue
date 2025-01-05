@@ -12,6 +12,7 @@
           :camera="camera" 
           :show-main-image="false"
           :selected-image="primaryImage"
+          :last-captured-at="lastCapturedAt"
           @onImageChange="(photo) => mainImage = photo"
         />
       </div>
@@ -32,9 +33,10 @@ import SingleView from "./SingleView.vue";
 import VueMagnifier from "@websitebeaver/vue-magnifier";
 import "@websitebeaver/vue-magnifier/styles.css";
 
-const { camera, primaryImage } = defineProps({
+const { camera, primaryImage, lastCapturedAt } = defineProps({
   camera: Object,
-  primaryImage: String
+  primaryImage: String,
+  lastCapturedAt: String
 });
 
 const mainImage = ref(primaryImage ?? '');

@@ -1,8 +1,12 @@
 <x-admin.layout title="View camera">
     <div id="backend-app">
         @if (auth()->user()->is_active)
-        <view-camera :camera="{{ $camera->toJson() }}" :user="{{ auth()->user()->toJson() }}" />
-            @else
+            <view-camera 
+                :camera="{{ $camera->toJson() }}" 
+                :user="{{ auth()->user()->toJson() }}" 
+                last-captured-at="{{ $last_captured_at }}"
+            />
+        @else
             <div class="mt-10">
                 <img src="{{ asset('dist/images/service-disabled.jpg') }}" alt="sadas"
                     class="w-full h-full object-cover">

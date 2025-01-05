@@ -5,6 +5,7 @@
         :camera="camera" 
         :mode="mode" 
         :selected-image="primaryImage" 
+        :last-captured-at="lastCapturedAt"
       />
     </div>
     <div class="col-span-2 md:col-span-1">
@@ -18,9 +19,10 @@
 
 <script setup>
 import SingleView from "./SingleView.vue";
-const { camera, mode, primaryImage } = defineProps({
+const { camera, mode, primaryImage, lastCapturedAt } = defineProps({
   camera: Object,
   mode: String,
-  primaryImage: String
+  primaryImage: String,
+  lastCapturedAt: String
 });
 </script>

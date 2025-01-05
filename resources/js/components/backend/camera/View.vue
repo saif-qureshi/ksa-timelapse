@@ -17,6 +17,7 @@
           :camera="camera" 
           :user="user" 
           :mode="activeKey" 
+          :last-captured-at="lastCapturedAt"
           :showMainImage="true"
           @on-image-change="handleImageChange"
         />
@@ -26,18 +27,21 @@
         :camera="camera" 
         :user="user" 
         :primary-image="primaryImage"
+        :last-captured-at="lastCapturedAt"
       />
       <spot-compare
         v-show="activeKey === 'spot-compare'"
         :camera="camera" 
         :user="user" 
         :primary-image="primaryImage"
+        :last-captured-at="lastCapturedAt"
       />
       <compare
         v-show="activeKey === 'compare'"
         :camera="camera" 
         :user="user" 
         :primary-image="primaryImage"
+        :last-captured-at="lastCapturedAt"
       />  
       <keep-alive>
         <videos-list
@@ -69,13 +73,17 @@ const SpotCompare = defineAsyncComponent(() => import('./partials/tabs/SpotCompa
 const VideosList = defineAsyncComponent(() => import('./partials/tabs/VideosList.vue'));
 const VideoGenerate = defineAsyncComponent(() => import('./partials/tabs/VideoGenerate.vue'));
 
-const { camera, user } = defineProps({
+const { camera, user, lastCapturedAt } = defineProps({
   camera: {
     type: Object,
     required: true
   },
   user: {
     type: Object,
+    required: true
+  },
+  lastCapturedAt: {
+    type: String,
     required: true
   }
 });

@@ -47,7 +47,12 @@ class CameraController extends Controller
      */
     public function show(Camera $camera)
     {
-        return view('camera.show', compact('camera'));
+        $recent = $camera->photos()->orderBy('created_at', 'desc')->first();
+
+        return view('camera.show')->with([
+            'camera' => $camera,
+            'last_captured_at' => $recent ? $recent->created_at->toDateString() : now()->toDateString(),
+        ]);
     }
 
     /**

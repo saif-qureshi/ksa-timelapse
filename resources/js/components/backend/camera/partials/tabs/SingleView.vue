@@ -64,6 +64,10 @@ const props = defineProps({
     type: Object,
     required: true
   },
+  lastCapturedAt: {
+    type: String,
+    required: false,
+  },
   mode: {
     type: String,
     default: 'single-view'
@@ -87,7 +91,7 @@ const emit = defineEmits(['onImageChange'])
 const imageRef = ref(null)
 const photos = ref([])
 const disabledDates = ref([])
-const selectedDate = ref(dayjs())
+const selectedDate = ref(dayjs(props?.lastCapturedAt))
 const selectedPhoto = ref({})
 
 const currentPhotoIndex = computed(() => {
